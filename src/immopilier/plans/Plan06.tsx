@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {ANNONCES} from '../annonces';
+import {CADASTRE_SOMBRE, CarteCadastre} from '../composants/CarteCadastre';
 import {milliers} from '../bien';
 
 /**
@@ -15,6 +16,11 @@ import {milliers} from '../bien';
  * Les treize biens sont tous différents — photo, prix, surface, secteur — parce
  * que le plan doit se lire comme treize annonces, pas comme une vignette
  * dupliquée. Ils sont dans `annonces.ts`.
+ *
+ * Derrière la pile, le plan cadastral, en encres sourdes. Il dérive lentement à
+ * contresens du recul de la caméra : c'est ce qui donne de la profondeur au tas,
+ * et c'est aussi la réponse que le produit apportera trois plans plus loin — la
+ * carte est déjà là, sous les annonces, on ne la voit simplement pas encore.
  */
 
 /** Suite déterministe : deux rendus du même plan donnent exactement la même pile. */
@@ -52,7 +58,10 @@ const VIGNETTES = ANNONCES.map((annonce, i) => {
     i,
     x: GAUCHE + colonne * pas + (alea(i + 1) - 0.5) * 150,
     y: -120 + rangee * 470 + (alea(i + 41) - 0.5) * 110,
-    rotation: (alea(i + 81) - 0.5) * 16, // ±8°
+    // Chacune a sa propre inclinaison et sa propre échelle. Sans cette
+    // irrégularité la pile se lit comme une planche contact, pas comme un tas.
+    rotation: (alea(i + 81) - 0.5) * 26, // ±13°
+    echelle: 0.93 + alea(i + 201) * 0.14,
     // L'ordre d'arrivée est brouillé : sans cela la pile se remplirait rangée par
     // rangée, ce qui se lit comme un tableau qui se charge, pas comme un tas.
     rang: Math.round(alea(i + 161) * 12),
@@ -75,6 +84,29 @@ export const Plan06: React.FC = () => {
         }),
       }}
     >
+      <AbsoluteFill
+        name="Plan cadastral en fond"
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          // Le fond avance quand la pile recule : le contresens creuse l'image.
+          scale: interpolate(frame, [0, 199], [0.94, 1.14], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+            easing: Easing.bezier(0.33, 0, 0.67, 1),
+          }),
+          opacity: interpolate(frame, [0, 26], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+            easing: Easing.bezier(0.2, 0.8, 0.2, 1),
+          }),
+        }}
+      >
+        <div style={{width: 2400, height: 2400}}>
+          <CarteCadastre parcelle={0} palette={CADASTRE_SOMBRE} />
+        </div>
+      </AbsoluteFill>
+
       <AbsoluteFill
         name="Recul caméra"
         style={{
@@ -99,6 +131,7 @@ export const Plan06: React.FC = () => {
               border: '1px solid #33333a',
               boxShadow: '0 30px 80px rgba(0,0,0,0.55)',
               rotate: `${v.rotation}deg`,
+              scale: v.echelle,
               // Six vignettes par seconde, soit une toutes les 10 images.
               opacity: interpolate(frame, [v.rang * 10, v.rang * 10 + 9], [0, 1], {
                 extrapolateLeft: 'clamp',

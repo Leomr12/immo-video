@@ -54,12 +54,13 @@ export const Plan03: React.FC = () => {
               <div style={{width: 1560}}>
                 <TypoCinetique
                   mots={[
-                    {texte: 'tu'},
-                    {texte: 'cherchais'},
-                    {texte: "l'adresse"},
-                    {texte: 'à', accent: true},
-                    {texte: 'la', accent: true},
-                    {texte: 'main', accent: true, suffixe: ' ?'},
+                    {texte: 'Mais'},
+                    {texte: 'où'},
+                    {texte: 'se'},
+                    {texte: 'trouve'},
+                    {texte: 'vraiment', accent: true},
+                    {texte: 'ce'},
+                    {texte: 'bien', suffixe: ' ?'},
                   ]}
                   depart={-240}
                   couleur="#121216"

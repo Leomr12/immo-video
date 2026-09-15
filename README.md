@@ -60,6 +60,11 @@ src/immopilier/
   composants/          Fond, TypoCinetique, CarteFrance, Boussole, Halo…
   plans/               un fichier par plan
   son/                 voix off, bruitages, musique — voir SON.md
+
+tools/
+  prep-france.mjs      la silhouette de la France des plans 1 et 20
+  prep-sons.mjs        les neuf bruitages, synthétisés
+  prep-musique.mjs     la version mixée de la piste livrée
   geo/france.ts        généré par tools/prep-france.mjs
 ```
 

@@ -47,20 +47,47 @@ export const PARCELLE = {
   hauteur: HAUTEUR_LANIERE,
 };
 
+/**
+ * Les quatre encres de la carte. Par défaut celles du plan 9, sur fond clair ;
+ * le plan 6 en passe une version sourde, pour que le plan cadastral se devine
+ * derrière la pile d'annonces sans jamais lui disputer l'attention.
+ */
+export type PaletteCarte = {
+  readonly fond: string;
+  readonly voirie: string;
+  readonly ilot: string;
+  readonly trait: string;
+};
+
+export const CADASTRE_CLAIR: PaletteCarte = {
+  fond: '#f0f0f2',
+  voirie: '#ffffff',
+  ilot: '#e5e5e9',
+  trait: '#d5d5db',
+};
+
+export const CADASTRE_SOMBRE: PaletteCarte = {
+  fond: '#0d0d10',
+  voirie: '#16161b',
+  ilot: '#121216',
+  trait: '#1e1e25',
+};
+
 export const CarteCadastre: React.FC<{
   /** Surlignage de la parcelle, 0 → 1. */
   readonly parcelle: number;
-}> = ({parcelle}) => {
+  readonly palette?: PaletteCarte;
+}> = ({parcelle, palette = CADASTRE_CLAIR}) => {
   return (
     <svg viewBox="0 0 2000 2000" style={{width: '100%', height: '100%'}}>
-      <rect x="0" y="0" width="2000" height="2000" fill="#f0f0f2" />
+      <rect x="0" y="0" width="2000" height="2000" fill={palette.fond} />
 
       {/* Voirie : des rues blanches, plus larges sur les axes. */}
       {Array.from({length: 7}).map((_, i) => (
-        <rect key={`h${i}`} x="0" y={100 + i * 348} width="2000" height={i === 3 ? 42 : 26} fill="#ffffff" />
+        <rect key={`h${i}`} x="0" y={100 + i * 348} width="2000" height={i === 3 ? 42 : 26} fill={palette.voirie} />
       ))}
       {Array.from({length: 9}).map((_, i) => (
-        <rect key={`v${i}`} x={80 + i * 232} y="0" width={i === 4 ? 40 : 24} height="2000" fill="#ffffff" />
+        <rect key={`v${i}`} x={80 + i * 232} y="0" width={i === 4 ? 40 : 24} height="2000" fill={palette.voirie} />
       ))}
 
       {/* Parcellaire : chaque îlot est redécoupé en lanières. */}
@@ -73,8 +100,8 @@ export const CarteCadastre: React.FC<{
               y={ilot.y}
               width={ilot.largeur}
               height={ilot.hauteur}
-              fill="#e5e5e9"
-              stroke="#d5d5db"
+              fill={palette.ilot}
+              stroke={palette.trait}
               strokeWidth={2}
             />
             {Array.from({length: lanieres - 1}).map((_, k) => (
@@ -84,7 +111,7 @@ export const CarteCadastre: React.FC<{
                 y1={ilot.y + ((k + 1) * ilot.hauteur) / lanieres}
                 x2={ilot.x + ilot.largeur}
                 y2={ilot.y + ((k + 1) * ilot.hauteur) / lanieres}
-                stroke="#d5d5db"
+                stroke={palette.trait}
                 strokeWidth={2}
               />
             ))}

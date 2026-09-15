@@ -13,7 +13,9 @@ import {TypoCinetique} from '../composants/TypoCinetique';
  * plan 1 s'achevait exactement sur 1,06 : le raccord est un mouvement, pas une
  * coupe.
  *
- * Texte — « tu cherchais l'adresse **à la main** ? », accent `--accent-600`.
+ * Texte — « Mais où se trouve **vraiment** ce bien ? », accent `--accent-600`.
+ * C'est mot pour mot la fin de la première réplique de la voix off : l'écran et la
+ * voix disent la même chose, au même moment.
  */
 export const Plan02: React.FC = () => {
   const frame = useCurrentFrame();
@@ -45,12 +47,13 @@ export const Plan02: React.FC = () => {
         <div style={{width: 1560}}>
           <TypoCinetique
             mots={[
-              {texte: 'tu'},
-              {texte: 'cherchais'},
-              {texte: "l'adresse"},
-              {texte: 'à', accent: true},
-              {texte: 'la', accent: true},
-              {texte: 'main', accent: true, suffixe: ' ?'},
+              {texte: 'Mais'},
+              {texte: 'où'},
+              {texte: 'se'},
+              {texte: 'trouve'},
+              {texte: 'vraiment', accent: true},
+              {texte: 'ce'},
+              {texte: 'bien', suffixe: ' ?'},
             ]}
             depart={10}
             couleur="#121216"

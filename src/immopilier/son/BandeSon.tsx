@@ -1,6 +1,6 @@
 import React from 'react';
 import {Audio} from '@remotion/media';
-import {AbsoluteFill, Sequence, interpolate, staticFile} from 'remotion';
+import {AbsoluteFill, Easing, Sequence, interpolate, staticFile} from 'remotion';
 import {BRUITAGES, TICKS_RADAR} from './bruitages';
 import {VOIX_OFF} from './voix-off';
 
@@ -30,11 +30,24 @@ import {VOIX_OFF} from './voix-off';
  *   Écart assumé par le commanditaire, qui l'a fournie. ⟧
  */
 export const MUSIQUE = {
-  fichier: 'nappe.mp3' as string | null,
+  fichier: 'nappe-mix.mp3' as string | null,
   /** Niveau nominal, hors passages parlés. */
   volume: 0.82,
-  /** Niveau sous la voix off — la musique s'efface, elle ne disparaît pas. */
-  volumeSousVoix: 0.26,
+  /**
+   * Niveau à partir du tunnel du plan 16, à l'image 2460.
+   *
+   * La voix off s'arrête à 39,7 s et la musique porte seule tout le dernier
+   * tiers : sans cette montée, le film s'éteint doucement là où il devrait
+   * conclure. +4 dB, atteints en 0,4 s — assez pour qu'on le sente, assez lent
+   * pour qu'on ne l'entende pas comme un défaut.
+   */
+  volumeApresTunnel: 1.3,
+  /**
+   * Ce que la voix off retire à la musique — une fraction du niveau en cours, et
+   * non une valeur absolue : la musique doit s'effacer autant avant qu'après la
+   * montée.
+   */
+  facteurSousVoix: 0.32,
 };
 
 /**
@@ -70,9 +83,15 @@ export const BandeSon: React.FC = () => {
           name="Musique"
           src={staticFile(`son/musique/${MUSIQUE.fichier}`)}
           volume={(f) =>
-            // Esquive sous la voix. Les fondus sont courts : la piste porte déjà
-            // les siens, on ne fait qu'éviter un clic aux deux extrémités.
-            (parle(f) ? MUSIQUE.volumeSousVoix : MUSIQUE.volume) *
+            // Montée au tunnel, esquive sous la voix, et des fondus très courts :
+            // la piste porte déjà les siens, on évite seulement un clic aux deux
+            // extrémités.
+            interpolate(f, [2460, 2484], [0.82, 1.3], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+              easing: Easing.bezier(0.2, 0.8, 0.2, 1),
+            }) *
+            (parle(f) ? MUSIQUE.facteurSousVoix : 1) *
             interpolate(f, [0, 8, 4040, 4050], [0, 1, 1, 0], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
