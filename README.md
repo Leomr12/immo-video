@@ -20,8 +20,8 @@ Compositions enregistrées :
 | Id | Contenu |
 |---|---|
 | `Immopilier` | le film complet, 4050 images |
-| `Acte-I`, `Acte-II` | un acte seul |
-| `Acte-I / Plan-01-Radar` … `Acte-II / Plan-07-Dossier` | chaque plan seul, à sa durée du script |
+| `Acte-I` … `Acte-V` | un acte seul |
+| `Acte-I / Plan-01-Radar` … `Acte-V / Plan-24-Bouton` | chacun des 24 plans seul, à sa durée du script |
 
 Un plan vu seul garde le fond qu'il aura au montage : `<PlanSeul>` avance
 l'horloge du fond continu jusqu'à l'image où le plan commence.
@@ -34,13 +34,18 @@ npx remotion render Immopilier out/immopilier-67s-1080p.mp4
 
 ## Avancement
 
-| Acte | Plans | Timecode | État |
-|---|---|---|---|
-| I. L'accroche | 1–4 | 0,0 → 8,5 s | monté |
-| II. Le coût du flou | 5–7 | 8,5 → 18,1 s | monté |
-| III. Le produit | 8–19 | 18,1 → 50,9 s | à monter |
-| IV. La preuve | 20–22 | 50,9 → 61,0 s | à monter |
-| V. L'appel | 23–24 | 61,0 → 67,5 s | à monter |
+Les cinq actes sont montés, soit les 24 plans du script.
+
+| Acte | Plans | Timecode |
+|---|---|---|
+| I. L'accroche | 1–4 | 0,0 → 8,5 s |
+| II. Le coût du flou | 5–7 | 8,5 → 18,1 s |
+| III. Le produit | 8–19 | 18,1 → 50,9 s |
+| IV. La preuve | 20–22 | 50,9 → 61,0 s |
+| V. L'appel | 23–24 | 61,0 → 67,5 s |
+
+Restent à faire, hors montage image : la voix off, la musique et le mixage, puis
+les trois recadrages livrables (carré, vertical, muet).
 
 ## Comment le code est organisé
 
@@ -83,9 +88,15 @@ node tools/prep-france.mjs
 
 Repris du dossier, à ne pas oublier :
 
-- Les trois chiffres marqués ⟦à confirmer⟧ au script (communes couvertes, ventes
-  analysées) sont à recompter avant le montage. À défaut, on retire le chiffre et
-  on garde la phrase.
+- **Les chiffres marqués ⟦à confirmer⟧** au script — « 34 935 communes couvertes »
+  aux plans 14 et 21 — sont à recompter avant le montage. À défaut, on retire le
+  chiffre et on garde la phrase.
+- **Les prix des communes du plan 15.** Le script n'en donne que deux :
+  Sainte-Foy-la-Grande 1 490 € et Port-Sainte-Foy 1 720 €. Les six autres
+  communes de la couronne sont bien les voisines réelles de
+  Saint-Avit-Saint-Nazaire, mais leurs prix sont des **valeurs d'attente**. Le
+  dossier interdit tout chiffre non vérifié à l'écran : remplacer par la médiane
+  DVF réelle, ou retirer la commune. Tout est dans `plans/Plan15.tsx`.
 - Aucune capture d'un site d'annonces réel, aucun logo de portail, aucun visage
   identifiable : les annonces des plans 6 et 8 sont fictives.
 - La musique n'est pas fournie. Piste libre de droits, 100–110 BPM, sans voix,
