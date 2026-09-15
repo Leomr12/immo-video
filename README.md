@@ -29,8 +29,17 @@ l'horloge du fond continu jusqu'à l'image où le plan commence.
 ## Rendre
 
 ```bash
-npx remotion render Immopilier out/immopilier-67s-1080p.mp4
+npm run rendu:1080p   # 1920 × 1080 — le master
+npm run rendu:4k      # 3840 × 2160 — même composition rendue au double
+npm run rendu:muet    # sans voix ni musique, pour les diffusions en sourdine
 ```
+
+La composition est en 1920 × 1080 et le 4K se rend avec `--scale=2`. Ce n'est
+pas un agrandissement : tout ce qui est dessiné — typographie, logo, carte de
+France, plan cadastral, entonnoir, étiquette DPE — est vectoriel et se retrace à
+la résolution demandée. Seules les treize photos d'annonces sont matricielles, et
+leurs fichiers d'origine font près de 2 000 px de large pour un affichage de
+760 px en 4K : elles ont de la marge.
 
 ## Avancement
 
