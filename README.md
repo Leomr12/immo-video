@@ -1,54 +1,92 @@
-# Remotion video
+# Immopilier — « Géolocalise, analyse, décide »
 
-<p align="center">
-  <a href="https://github.com/remotion-dev/logo">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-dark.apng">
-      <img alt="Animated Remotion Logo" src="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-light.gif">
-    </picture>
-  </a>
-</p>
+Film de 67,5 s monté avec [Remotion](https://remotion.dev).
+**1920 × 1080 · 60 fps · 4050 images · 24 plans · cinq actes.**
 
-Welcome to your Remotion project!
+Le conducteur, la charte, les polices et les logos sont dans
+[`dossier-immopilier/`](dossier-immopilier/), versionnés tels qu'ils ont été
+fournis. Le script (`dossier-immopilier/SCRIPT-VIDEO.md`) fait foi : image,
+mouvement, texte à l'écran et voix off, plan par plan.
 
-## Commands
+## Lancer
 
-**Install Dependencies**
-
-```console
-npm i
+```bash
+npm install
+npm run dev        # ouvre Remotion Studio
 ```
 
-**Start Preview**
+Compositions enregistrées :
 
-```console
-npm run dev
+| Id | Contenu |
+|---|---|
+| `Immopilier` | le film complet, 4050 images |
+| `Acte-I` | l'acte I seul, 510 images |
+| `Acte-I / Plan-01-Radar` … `Plan-04-Constat` | chaque plan seul, à sa durée du script |
+
+Un plan vu seul garde le fond qu'il aura au montage : `<PlanSeul>` avance
+l'horloge du fond continu jusqu'à l'image où le plan commence.
+
+## Rendre
+
+```bash
+npx remotion render Immopilier out/immopilier-67s-1080p.mp4
 ```
 
-**Render video**
+## Avancement
 
-```console
-npx remotion render
+| Acte | Plans | Timecode | État |
+|---|---|---|---|
+| I. L'accroche | 1–4 | 0,0 → 8,5 s | monté |
+| II. Le coût du flou | 5–7 | 8,5 → 18,1 s | à monter |
+| III. Le produit | 8–19 | 18,1 → 50,9 s | à monter |
+| IV. La preuve | 20–22 | 50,9 → 61,0 s | à monter |
+| V. L'appel | 23–24 | 61,0 → 67,5 s | à monter |
+
+## Comment le code est organisé
+
+```
+src/immopilier/
+  minutage.ts          les 24 plans, bornés à l'image près
+  charte.ts            les jetons de la charte + les suites de couleurs
+  fonts.ts             Geist et Geist Mono, chargés depuis public/polices/
+  composants/          Fond, TypoCinetique, CarteFrance, Boussole, Halo…
+  plans/               un fichier par plan
+  geo/france.ts        généré par tools/prep-france.mjs
 ```
 
-**Upgrade Remotion**
+**Le fond est une couche unique** qui traverse les 4050 images
+(`composants/Fond.tsx`). Les bascules clair ↔ sombre du script sont donc des
+changements de couleur en 400 ms, jamais des changements de plan.
 
-```console
-npx remotion upgrade
+**Les raccords sont des mouvements de caméra, pas des coupes.** Chaque plan
+déborde de quelques images sur le suivant et sa dernière valeur de caméra est la
+première du plan d'après — le plan 1 s'achève sur un zoom de 1,06, le plan 2 le
+reprend à 1,06. C'est pour cela qu'on n'utilise pas `<TransitionSeries>`, qui
+raccourcirait la frise et décalerait tous les timecodes du script.
+
+**La typographie est cinétique, mot à mot** (`composants/TypoCinetique.tsx`) :
+un mot toutes les 60 ms, ressort suramorti — la détente d'un spring, jamais le
+dépassement, comme l'impose la charte (« Rien n'entre par le bas en
+rebondissant »). L'accent ne change que la couleur, jamais la graisse.
+
+**La carte de France** (plans 1 et 20) est une géométrie figée, pas une carte à
+tuiles : Natural Earth 1:50m projetée en conique conforme 44°/49°, précalculée
+par `tools/prep-france.mjs` en un tracé SVG et 150 points de vente déterministes.
+Le rendu ne dépend donc d'aucune clé d'API ni d'aucun réseau, et deux rendus
+donnent exactement la même image. Pour la régénérer :
+
+```bash
+node tools/prep-france.mjs
 ```
 
-## Docs
+## Ce qui reste à trancher avant diffusion
 
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
+Repris du dossier, à ne pas oublier :
 
-## Help
-
-We provide help on our [Discord server](https://discord.gg/6VzzNDwUwV).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/remotion-dev/remotion/issues/new).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
+- Les trois chiffres marqués ⟦à confirmer⟧ au script (communes couvertes, ventes
+  analysées) sont à recompter avant le montage. À défaut, on retire le chiffre et
+  on garde la phrase.
+- Aucune capture d'un site d'annonces réel, aucun logo de portail, aucun visage
+  identifiable : les annonces des plans 6 et 8 sont fictives.
+- La musique n'est pas fournie. Piste libre de droits, 100–110 BPM, sans voix,
+  licence vérifiée même pour une diffusion organique.

@@ -1,0 +1,169 @@
+/* ============================================================
+   IMMOPILIER — COULEURS
+   Identité monochrome. 12 niveaux de gris neutres + 1 accent sobre.
+   Toute valeur sémantique existe en clair ET en sombre.
+   ============================================================ */
+
+:root{
+  /* --- Primitives : neutres (base cool-neutral) --- */
+  --n-0:#ffffff;
+  --n-25:#fbfbfc;
+  --n-50:#f6f6f8;
+  --n-100:#f0f0f2;
+  --n-200:#e5e5e9;
+  --n-300:#d5d5db;
+  --n-400:#b3b3bc;
+  --n-500:#8b8b96;
+  --n-600:#6a6a75;
+  --n-700:#4d4d57;
+  --n-800:#33333a;
+  --n-900:#1d1d22;
+  --n-950:#121216;
+  --n-1000:#000000;
+
+  /* --- Primitives : accent unique (bleu institutionnel, usage parcimonieux) --- */
+  --accent-50:#eef1ff;
+  --accent-100:#dbe2ff;
+  --accent-200:#b9c6ff;
+  --accent-400:#6e88f7;
+  --accent-500:#4a6bf2;
+  --accent-600:#2e4fe6;
+  --accent-700:#2340bd;
+  --accent-900:#16255f;
+
+  /* --- Primitives : sémantiques --- */
+  --green-500:#128a5c; --green-300:#34c08a; --green-50:#e8f6ef;
+  --amber-500:#a8620a; --amber-300:#e9a23b; --amber-50:#fbf2e4;
+  --red-500:#b3261e;   --red-300:#f4776c;   --red-50:#fdecea;
+
+  /* --- Échelle DPE / GES officielle A→G (identique dans les 2 thèmes) --- */
+  --dpe-a:#319a68; --dpe-b:#5fb15a; --dpe-c:#a9c94f; --dpe-d:#f3dc2a;
+  --dpe-e:#efa33d; --dpe-f:#e5652c; --dpe-g:#d22f27;
+  --dpe-a-ink:#ffffff; --dpe-b-ink:#0b2416; --dpe-c-ink:#1b2408;
+  --dpe-d-ink:#2a2402; --dpe-e-ink:#2a1a03; --dpe-f-ink:#ffffff; --dpe-g-ink:#ffffff;
+
+  /* --- Palette catégorielle graphiques (6, distinguable en deutéranopie) --- */
+  --cat-1:#2e4fe6; --cat-2:#0f766e; --cat-3:#9a6b12;
+  --cat-4:#5b7ca6; --cat-5:#b14a3c; --cat-6:#4d4d57;
+}
+
+/* ============================================================
+   THÈME CLAIR (défaut)
+   ============================================================ */
+:root,[data-theme="light"]{
+  color-scheme:light;
+
+  --color-bg:var(--n-0);
+  --color-bg-subtle:var(--n-50);
+  --color-bg-inset:var(--n-100);
+  --color-surface:var(--n-0);
+  --color-surface-elevated:var(--n-0);
+  --color-surface-sunken:var(--n-50);
+  --color-surface-hover:var(--n-50);
+  --color-surface-active:var(--n-100);
+  --color-overlay:rgba(18,18,22,.42);
+
+  --color-border:var(--n-200);
+  --color-border-strong:var(--n-300);
+  --color-border-subtle:var(--n-100);
+  --color-border-inverse:var(--n-800);
+
+  --color-text-primary:var(--n-950);
+  --color-text-secondary:var(--n-700);
+  --color-text-muted:var(--n-600);
+  --color-text-faint:var(--n-500);
+  --color-text-inverse:var(--n-0);
+  --color-text-on-accent:#ffffff;
+
+  --color-accent:var(--accent-600);
+  --color-accent-hover:var(--accent-700);
+  --color-accent-subtle:var(--accent-50);
+  --color-accent-border:var(--accent-200);
+  --color-focus-ring:var(--accent-600);
+
+  --color-action:var(--n-950);          /* bouton primaire : noir sur clair */
+  --color-action-hover:var(--n-800);
+  --color-action-text:var(--n-0);
+
+  --color-success:var(--green-500); --color-success-bg:var(--green-50); --color-success-border:#bde3d0;
+  --color-warning:var(--amber-500); --color-warning-bg:var(--amber-50); --color-warning-border:#ecd6ab;
+  --color-danger:var(--red-500);    --color-danger-bg:var(--red-50);   --color-danger-border:#f3c6c1;
+  --color-info:var(--accent-600);   --color-info-bg:var(--accent-50);  --color-info-border:var(--accent-200);
+
+  --color-positive:var(--green-500);   /* variations de prix */
+  --color-negative:var(--red-500);
+
+  /* Heatmap prix/m² — 8 paliers séquentiels clair→foncé (CVD-safe, dérivée magma) */
+  --heat-1:#fcf4e4; --heat-2:#f9d9a8; --heat-3:#f4a96b; --heat-4:#e97a4f;
+  --heat-5:#cf5147; --heat-6:#a53048; --heat-7:#6f1f4c; --heat-8:#33143c;
+  --heat-ink-low:#33143c; --heat-ink-high:#ffffff;
+
+  /* Fond de carte minimaliste */
+  --map-bg:#f4f4f2; --map-water:#e3e8ec; --map-road:#ffffff;
+  --map-road-casing:#e5e5e9; --map-building:#e9e9e6; --map-label:#4d4d57;
+
+  --color-agent:var(--accent-600);
+  --color-agent-glow:rgba(46,79,230,.28);
+}
+
+/* ============================================================
+   THÈME SOMBRE
+   ============================================================ */
+[data-theme="dark"]{
+  color-scheme:dark;
+
+  --color-bg:#0a0a0c;
+  --color-bg-subtle:#0f0f12;
+  --color-bg-inset:#08080a;
+  --color-surface:#121216;
+  --color-surface-elevated:#17171c;
+  --color-surface-sunken:#0d0d10;
+  --color-surface-hover:#1c1c22;
+  --color-surface-active:#23232a;
+  --color-overlay:rgba(0,0,0,.62);
+
+  --color-border:#26262e;
+  --color-border-strong:#34343e;
+  --color-border-subtle:#1c1c22;
+  --color-border-inverse:var(--n-200);
+
+  --color-text-primary:#f5f5f7;
+  --color-text-secondary:#b9b9c2;
+  --color-text-muted:#93939e;
+  --color-text-faint:#75757f;
+  --color-text-inverse:#0a0a0c;
+  --color-text-on-accent:#0a0a0c;
+
+  --color-accent:var(--accent-400);
+  --color-accent-hover:#8ba1ff;
+  --color-accent-subtle:rgba(110,136,247,.12);
+  --color-accent-border:rgba(110,136,247,.32);
+  --color-focus-ring:var(--accent-400);
+
+  --color-action:var(--n-0);            /* bouton primaire : blanc sur sombre */
+  --color-action-hover:var(--n-200);
+  --color-action-text:var(--n-950);
+
+  --color-success:var(--green-300); --color-success-bg:rgba(52,192,138,.12); --color-success-border:rgba(52,192,138,.3);
+  --color-warning:var(--amber-300); --color-warning-bg:rgba(233,162,59,.12); --color-warning-border:rgba(233,162,59,.3);
+  --color-danger:var(--red-300);    --color-danger-bg:rgba(244,119,108,.12); --color-danger-border:rgba(244,119,108,.3);
+  --color-info:var(--accent-400);   --color-info-bg:rgba(110,136,247,.12);   --color-info-border:rgba(110,136,247,.3);
+
+  --color-positive:var(--green-300);
+  --color-negative:var(--red-300);
+
+  /* Heatmap — remontée en luminosité pour rester lisible sur fond sombre */
+  --heat-1:#2b1433; --heat-2:#511f4a; --heat-3:#7d2a4c; --heat-4:#a83f47;
+  --heat-5:#cb5c44; --heat-6:#e58452; --heat-7:#f3ad72; --heat-8:#fbd9a6;
+  --heat-ink-low:#fbd9a6; --heat-ink-high:#2b1433;
+
+  --map-bg:#0e0e11; --map-water:#121a22; --map-road:#23232a;
+  --map-road-casing:#16161b; --map-building:#17171c; --map-label:#b9b9c2;
+
+  --color-agent:var(--accent-400);
+  --color-agent-glow:rgba(110,136,247,.34);
+
+  /* Catégorielles éclaircies pour le sombre */
+  --cat-1:#6e88f7; --cat-2:#3fb3a4; --cat-3:#d79b3a;
+  --cat-4:#8fb0d6; --cat-5:#e0806f; --cat-6:#9a9aa6;
+}

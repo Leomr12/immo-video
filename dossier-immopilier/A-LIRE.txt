@@ -1,0 +1,63 @@
+IMMOPILIER — DOSSIER VIDÉO
+==========================
+
+Tout ce qu'il faut pour faire tourner une vidéo de 67,5 secondes calquée sur le
+film que vous m'avez envoyé, mais qui parle d'Immopilier : géolocalisation
+d'annonce, carte des prix, recherche d'opportunité, analyse de marché.
+
+
+PAR OÙ COMMENCER
+----------------
+1. SCRIPT-VIDEO.md      le script complet, plan par plan, avec timecodes,
+                        mouvements, texte à l'écran et voix off. C'est le
+                        document à envoyer au monteur.
+2. storyboard/storyboard.html
+                        le même conducteur en une planche : ouvrez-le dans un
+                        navigateur (double-clic). La frise du haut montre les
+                        24 plans à leur durée réelle, fond clair ou sombre.
+                        Imprimable tel quel.
+3. voix-off.txt         la voix off seule, une phrase par ligne, pour
+                        l'enregistrement ou la synthèse vocale.
+4. sous-titres.srt      les sous-titres minutés, à incruster sur la version
+                        verticale (celle qui se regarde sans le son).
+
+
+LE DOSSIER MARQUE
+-----------------
+marque/CHARTE-VIDEO.md  couleurs, typographie, logos, mouvement, son.
+marque/palette.json     les mêmes couleurs, prêtes à importer dans Figma ou
+                        After Effects.
+marque/couleurs.css     le fichier de couleurs du site, tel quel.
+marque/mouvement.css    les durées et courbes d'animation du site.
+marque/polices/         les 9 fichiers de police du site en .ttf — Geist,
+                        Geist Mono, Instrument Serif. Toutes libres (OFL),
+                        usage commercial autorisé. Voir POLICES.md.
+marque/logos/           les logos en SVG, métadonnées nettoyées, plus trois
+                        variantes de couleur.
+marque/logos/png/       les mêmes en PNG transparent 1024 et 2048 px, rendus
+                        avec la vraie police : à utiliser dans le montage,
+                        le SVG dépend de Geist installé sur la machine.
+
+
+CE QUI A ÉTÉ REPRIS DU FILM DE RÉFÉRENCE
+----------------------------------------
+Sa durée (67,5 s), sa cadence (60 fps), son découpage — j'ai relevé ses 27
+coupes une à une pour caler les 24 plans du nôtre sur le même rythme —, sa
+dramaturgie en cinq actes, sa bascule blanc/sombre, sa typographie cinétique
+mot à mot avec un mot sur cinq en couleur, ses compteurs chiffrés, son plan
+final logo + bouton + curseur qui clique.
+
+Ce qui change : les couleurs, les polices et les logos sont ceux d'Immopilier,
+pas ceux du film. Et le propos, évidemment.
+
+
+TROIS CHOSES À NE PAS OUBLIER
+-----------------------------
+· Les trois chiffres marqués « à confirmer » dans le script (nombre de
+  communes, ventes analysées) doivent être recomptés avant le montage. Si le
+  compte n'est pas sûr, on retire le chiffre et on garde la phrase.
+· Aucune capture d'un site d'annonces réel, aucun logo de portail, aucun
+  visage identifiable : le script utilise des annonces fictives.
+· La musique n'est pas fournie. Cherchez une piste libre de droits, 100 à
+  110 BPM, sans voix, et vérifiez la licence même pour une diffusion
+  organique.

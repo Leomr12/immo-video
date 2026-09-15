@@ -1,0 +1,82 @@
+{
+  "marque": "Immopilier",
+  "source": "assets/css/tokens/colors.css",
+  "accent": {
+    "50": "#eef1ff",
+    "100": "#dbe2ff",
+    "200": "#b9c6ff",
+    "400": "#6e88f7",
+    "500": "#4a6bf2",
+    "600": "#2e4fe6",
+    "700": "#2340bd",
+    "900": "#16255f"
+  },
+  "neutres": {
+    "0": "#ffffff",
+    "25": "#fbfbfc",
+    "50": "#f6f6f8",
+    "100": "#f0f0f2",
+    "200": "#e5e5e9",
+    "300": "#d5d5db",
+    "400": "#b3b3bc",
+    "500": "#8b8b96",
+    "600": "#6a6a75",
+    "700": "#4d4d57",
+    "800": "#33333a",
+    "900": "#1d1d22",
+    "950": "#121216",
+    "1000": "#000000"
+  },
+  "fonds": {
+    "clair": "#ffffff",
+    "clair_attenue": "#f6f6f8",
+    "sombre": "#0a0a0c",
+    "sombre_attenue": "#0f0f12",
+    "surface_sombre": "#121216",
+    "surface_sombre_elevee": "#17171c"
+  },
+  "texte": {
+    "clair_principal": "#121216",
+    "clair_secondaire": "#4d4d57",
+    "sombre_principal": "#f6f6f8",
+    "sombre_secondaire": "#b3b3bc"
+  },
+  "semantique": {
+    "succes": "#128a5c",
+    "alerte": "#a8620a",
+    "danger": "#b3261e"
+  },
+  "dpe": {
+    "A": "#319a68",
+    "B": "#5fb15a",
+    "C": "#a9c94f",
+    "D": "#f3dc2a",
+    "E": "#efa33d",
+    "F": "#e5652c",
+    "G": "#d22f27",
+    "encre": "#ffffff"
+  },
+  "echelle_prix": [
+    "#e0e7ff",
+    "#c7d2fe",
+    "#a5b4fc",
+    "#818cf8",
+    "#fbbf24",
+    "#f59e0b",
+    "#ef4444",
+    "#b91c1c"
+  ],
+  "categoriel": [
+    "#2e4fe6",
+    "#0f766e",
+    "#9a6b12",
+    "#5b7ca6",
+    "#b14a3c",
+    "#4d4d57"
+  ],
+  "polices": {
+    "interface": "Geist",
+    "editorial": "Instrument Serif",
+    "donnees": "Geist Mono"
+  }
+}
