@@ -5,8 +5,10 @@
  * d'un décibel la ferait écrêter. Or le film en a besoin plus fort après 41 s,
  * là où la voix off s'arrête et où la musique porte seule.
  *
- * `loudnorm` rend la marge : même sensation de niveau, crête ramenée à −4,5 dBFS.
- * On peut alors pousser de 3,5 dB au tunnel sans jamais toucher le plafond.
+ * `loudnorm` rend la marge : même sensation de niveau — il vise une loudness, pas
+ * une crête —, mais crête ramenée à −6,5 dBFS. On dispose alors de 6 dB pour
+ * monter la musique sur tout le film et la pousser encore au tunnel, sans jamais
+ * toucher le plafond.
  *
  * Le fichier livré n'est pas modifié — il reste la source. C'est `nappe-mix.mp3`
  * que la vidéo monte.
@@ -32,7 +34,7 @@ const ffmpeg = (args) =>
 // résultat dérive de plusieurs dixièmes de LU.
 const mesure = ffmpeg([
   '-hide_banner', '-i', source,
-  '-af', 'loudnorm=I=-19:TP=-4.5:LRA=9:print_format=json',
+  '-af', 'loudnorm=I=-19:TP=-6.5:LRA=9:print_format=json',
   '-f', 'null', '-',
 ]);
 const json = JSON.parse(mesure.slice(mesure.lastIndexOf('{'), mesure.lastIndexOf('}') + 1));
@@ -42,7 +44,7 @@ console.log('mesuré :', `${json.input_i} LUFS · crête vraie ${json.input_tp} 
 ffmpeg([
   '-y', '-loglevel', 'error', '-i', source,
   '-af',
-  `loudnorm=I=-19:TP=-4.5:LRA=9:measured_I=${json.input_i}:measured_TP=${json.input_tp}` +
+  `loudnorm=I=-19:TP=-6.5:LRA=9:measured_I=${json.input_i}:measured_TP=${json.input_tp}` +
     `:measured_LRA=${json.input_lra}:measured_thresh=${json.input_thresh}:offset=${json.target_offset}:linear=true`,
   '-codec:a', 'libmp3lame', '-b:a', '192k', sortie,
 ]);

@@ -31,17 +31,23 @@ import {VOIX_OFF} from './voix-off';
  */
 export const MUSIQUE = {
   fichier: 'nappe-mix.mp3' as string | null,
-  /** Niveau nominal, hors passages parlés. */
-  volume: 0.82,
+  /**
+   * Niveau nominal, hors passages parlés.
+   *
+   * La piste mixée plafonne à −6,7 dBFS de crête : on peut donc la monter
+   * jusqu'à 2,17 avant d'écrêter, ce qui laisse de quoi la tenir présente sur
+   * tout le film et la pousser encore au tunnel.
+   */
+  volume: 1.19,
   /**
    * Niveau à partir du tunnel du plan 16, à l'image 2460.
    *
    * La voix off s'arrête à 39,7 s et la musique porte seule tout le dernier
    * tiers : sans cette montée, le film s'éteint doucement là où il devrait
-   * conclure. +4 dB, atteints en 0,4 s — assez pour qu'on le sente, assez lent
+   * conclure. +3 dB, atteints en 0,4 s — assez pour qu'on le sente, assez lent
    * pour qu'on ne l'entende pas comme un défaut.
    */
-  volumeApresTunnel: 1.3,
+  volumeApresTunnel: 1.68,
   /**
    * Ce que la voix off retire à la musique — une fraction du niveau en cours, et
    * non une valeur absolue : la musique doit s'effacer autant avant qu'après la
@@ -53,20 +59,20 @@ export const MUSIQUE = {
 /**
  * Images où la voix off parle, pour baisser la musique dessous.
  *
- * Seules comptent les répliques réellement enregistrées : esquiver sous une voix
- * absente laisserait la musique au niveau bas pendant tout le film, et on
- * n'entendrait presque rien.
+ * Chaque passage dure exactement la prise, relevée sur le fichier, plus une
+ * demi-seconde de reprise. Les répliques font trois secondes pour des créneaux de
+ * six : tenir le niveau bas jusqu'à la suivante laissait la musique étouffée
+ * pendant tout le premier tiers, silences compris.
  *
- * Faute de connaître la durée d'un fichier avant de l'avoir, on tient le niveau
- * bas jusqu'à la réplique suivante. Les silences du script — plans 3, 10, 18 et
- * 20 — restent pleins parce qu'aucune réplique n'y commence.
+ * Seules comptent les répliques réellement enregistrées — esquiver sous une voix
+ * absente reviendrait à baisser pour rien.
  */
-const PASSAGES_PARLES = VOIX_OFF.filter((replique) => replique.fichier).map((replique) => {
-  const suivante = VOIX_OFF.find((autre) => autre.debut > replique.debut);
-  return {debut: replique.debut, fin: suivante ? suivante.debut : 3840};
-});
+const PASSAGES_PARLES = VOIX_OFF.filter((replique) => replique.fichier && replique.duree).map((replique) => ({
+  debut: replique.debut - 12,
+  fin: replique.debut + (replique.duree ?? 0) + 30,
+}));
 
-const parle = (frame: number) => PASSAGES_PARLES.some((p) => frame >= p.debut - 12 && frame < p.fin);
+const parle = (frame: number) => PASSAGES_PARLES.some((p) => frame >= p.debut && frame < p.fin);
 
 /**
  * Les prises de voix sortent à −6 dBFS de crête. On les remonte un peu : c'est la
@@ -86,7 +92,7 @@ export const BandeSon: React.FC = () => {
             // Montée au tunnel, esquive sous la voix, et des fondus très courts :
             // la piste porte déjà les siens, on évite seulement un clic aux deux
             // extrémités.
-            interpolate(f, [2460, 2484], [0.82, 1.3], {
+            interpolate(f, [2460, 2484], [1.19, 1.68], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
               easing: Easing.bezier(0.2, 0.8, 0.2, 1),

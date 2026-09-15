@@ -3,7 +3,7 @@
 **La musique est en place et les bruitages sont posés.** Sept des douze répliques
 de voix off sont calées ; les cinq dernières manquent.
 
-Mesuré sur le rendu : **crête −3,3 dBFS, RMS −21,4 dBFS, aucun échantillon
+Mesuré sur le rendu : **crête −2,6 dBFS, RMS −19,1 dBFS, aucun échantillon
 écrêté**. De la marge sous le plafond, et la voix reste devant.
 
 Où ça se passe :
@@ -58,15 +58,23 @@ ouvrir le Studio, la timeline les montre à leur place, nommées. ⟧
 
 ### Ajouter les répliques 8 à 12
 
-Déposer les fichiers dans `public/son/voix/` et écrire leur nom :
+Déposer les fichiers dans `public/son/voix/`, écrire leur nom **et leur durée en
+images** :
 
 ```ts
 // src/immopilier/son/voix-off.ts
-{n: 8, debut: 2520, timecode: '0:42', fichier: 'vo-08.mp3',
+{n: 8, debut: 2520, timecode: '0:42', fichier: 'vo-08.mp3', duree: 240,
  texte: 'Parmi des dizaines de transactions, …'},
 ```
 
-C'est tout. La réplique se monte à son image, la musique baissera dessous quand
+La durée n'est pas facultative : c'est elle qui dit à la musique combien de temps
+s'effacer. Pour la relever :
+
+```bash
+npx remotion ffmpeg -i public/son/voix/vo-08.mp3 -f null - 2>&1 | grep time=
+```
+
+Multiplier les secondes par 60. La réplique se monte à son image, la musique baissera dessous quand
 il y en aura une.
 
 ### Si une réplique déborde
@@ -151,9 +159,11 @@ La vidéo ne monte pas ce fichier mais `nappe-mix.mp3`, produit par
 
 La piste livrée est normalisée à −1,0 dBFS de crête. À ce niveau on ne peut pas
 la monter d'un seul décibel sans l'écrêter — or le film en a besoin plus fort
-après 41 s. Un passage de `loudnorm` en deux temps lui rend **4 dB de marge à
-sensation de niveau égale** : crête −5,0 dBFS, RMS inchangé à −20,9. Le fichier
-livré n'est pas touché, il reste la source.
+partout, et plus fort encore après 41 s. Un passage de `loudnorm` en deux temps
+lui rend **6 dB de marge à sensation de niveau égale** — il vise une loudness,
+pas une crête : crête −6,7 dBFS, RMS inchangé à −21,3. On peut alors la monter
+jusqu'à 2,17 avant d'écrêter. Le fichier livré n'est pas touché, il reste la
+source.
 
 Régénérer : `node tools/prep-musique.mjs`
 
@@ -169,25 +179,37 @@ Mesuré sur le rendu :
 
 | Fenêtre | Niveau |
 |---|---|
-| 36 → 41 s, avant le tunnel | −23,3 dBFS |
-| 41 → 46 s, après le tunnel | −18,7 dBFS |
-| 46 → 64 s, la fin | −18,1 dBFS |
-
-Soit **+4,6 dB**, sans un seul échantillon écrêté.
+| entre les répliques, avant le tunnel | −18 à −21 dBFS |
+| sous une réplique | −22 à −23 dBFS |
+| 41 → 64 s, après le tunnel | −16,4 dBFS |
 
 ```ts
 export const MUSIQUE = {
   fichier: 'nappe-mix.mp3',
-  volume: 0.82,             // nominal
-  volumeApresTunnel: 1.3,   // à partir de l'image 2460
+  volume: 1.19,             // nominal
+  volumeApresTunnel: 1.68,  // à partir de l'image 2460
   facteurSousVoix: 0.32,    // ce que la voix retire, en fraction du niveau en cours
 };
 ```
 
-L'esquive est une **fraction** du niveau en cours, pas une valeur absolue : la
-musique s'efface donc autant avant qu'après la montée. Elle ne compte que les
-répliques réellement enregistrées — tant que les cinq dernières manquent, la
-musique reste pleine après 39,5 s, ce qui est le bon comportement.
+### L'esquive
+
+Deux règles, et la seconde a coûté cher avant d'être trouvée.
+
+**C'est une fraction du niveau en cours**, pas une valeur absolue : la musique
+s'efface donc autant avant qu'après la montée.
+
+**Elle dure exactement la prise**, relevée sur le fichier et inscrite dans le
+champ `duree` de `voix-off.ts`, plus douze images d'anticipation et une
+demi-seconde de reprise. Auparavant elle tenait jusqu'à la réplique *suivante* —
+or les répliques font trois secondes pour des créneaux de six. La musique restait
+donc étouffée pendant tout le premier tiers, silences compris, et aucune montée
+de volume n'y changeait rien : ce n'était pas un problème de niveau mais de
+durée. Corrigé, la musique entre les répliques gagne **8 dB**.
+
+Elle ne compte que les répliques réellement enregistrées — tant que les cinq
+dernières manquent, la musique reste pleine après 39,5 s, ce qui est le bon
+comportement.
 
 ⟦ Le dossier demandait une piste entre 100 et 110 BPM ; celle-ci est à 116.
   Écart assumé — c'est la piste fournie. ⟧
@@ -208,7 +230,7 @@ Pour le livrable **muet** demandé par le dossier :
 npx remotion render Immopilier out/immopilier-67s-muet.mp4 --muted
 ```
 
-Le mixage sort à −21,4 dBFS RMS, avec 3,3 dB de marge. C'est un master prudent,
+Le mixage sort à −19,1 dBFS RMS, avec 2,6 dB de marge. C'est un master prudent,
 sans limiteur. Pour viser les −16 LUFS attendus sur le web, passer le fichier
 rendu par une normalisation de loudness :
 
