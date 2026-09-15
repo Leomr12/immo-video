@@ -48,6 +48,9 @@ export const VOIX_OFF: Replique[] = [
    texte: "Et pour aller plus loin, posez vos questions directement à l'agent IA."},
   {n: 10, debut: 3240, timecode: '0:54', fichier: null,
    texte: 'Des données publiques et officielles, partout en France.'},
+  // ⟦ Le texte à l'écran du plan 22 a changé — « Immopilier, votre copilote pour
+  //   accéder à l'intelligence immobilière française. » La voix, elle, reste
+  //   celle du conducteur. À arbitrer avant d'enregistrer cette réplique. ⟧
   {n: 11, debut: 3420, timecode: '0:57', fichier: null,
    texte: 'Vous ne comparez plus des annonces. Vous comparez des faits.'},
   {n: 12, debut: 3780, timecode: '1:03', fichier: null,

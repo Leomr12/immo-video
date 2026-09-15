@@ -3,7 +3,7 @@
 **La musique est en place et les bruitages sont posés.** Sept des douze répliques
 de voix off sont calées ; les cinq dernières manquent.
 
-Mesuré sur le rendu : **crête −2,7 dBFS, RMS −23,5 dBFS, aucun échantillon
+Mesuré sur le rendu : **crête −2,7 dBFS, RMS −23,7 dBFS, aucun échantillon
 écrêté**. De la marge sous le plafond, et la voix reste devant.
 
 Où ça se passe :
@@ -14,7 +14,7 @@ public/son/bruitages/     les neuf sons, fabriqués par tools/prep-sons.mjs
 public/son/musique/       nappe.mp3 — la piste fournie
 src/immopilier/son/
   voix-off.ts             les 12 répliques du conducteur et leur image de départ
-  bruitages.ts            les 46 repères de bruitage, à l'image
+  bruitages.ts            les 42 repères de bruitage, à l'image
   BandeSon.tsx            le montage son, monté dans la composition
 ```
 
@@ -90,8 +90,8 @@ s'entendent.
 |---|---|---|
 | 0,1 → 2,2 s | les huit *ticks* du radar, plan 1 | 0,18 |
 | 5,30 s | le *clac* de pause, quand la fenêtre se fige | 0,50 |
-| 18,12 s | le souffle montant sur l'arrivée de la marque | 0,38 |
-| 20,88 s | le *ding* propre sur le ✓ de l'URL | 0,62 |
+| 18,12 s | le souffle montant sur l'arrivée de la marque | 0,16 |
+| 20,88 s | le *ding* propre sur le ✓ de l'URL | 0,45 |
 | 24,60 s | le point qui se pose sur la parcelle | 0,50 |
 | 26,52 s | le *clic* du curseur sur le ✓ | 0,50 |
 | 66,40 s | le *clic* de souris final | 0,60 |
@@ -105,18 +105,23 @@ règle : un bruitage se règle *contre* la voix, pas dans le vide.
 
 ### Les sons d'interface
 
-Ce qui apparaît, ce qui défile, ce qui glisse : les jalons du plan 5, les vingt
-vignettes du plan 6, les quatre blocs du plan 13, la couronne, les bulles, les
-grands chiffres. Trente-neuf repères en tout, tous entre **0,12 et 0,34** — c'est
-de la texture, pas un événement.
+Ce qui apparaît, ce qui glisse : les jalons du plan 5, les vignettes du plan 6,
+les quatre blocs du plan 13, la couronne, les bulles, les grands chiffres.
 
-Ils sont volontairement à peine audibles, et certains sont masqués par la voix :
-c'est voulu. Quarante bruits à plein niveau transformeraient la démonstration en
-jeu vidéo. Deux plans restent **nus** — le 22 et les arcs du 23 : la musique doit
-respirer avant la chute, et le dernier clic n'a de poids que sur du silence.
+Ils sont calés **au niveau de la musique** : 0,08 pour une apparition, 0,10 pour
+un glissement, 0,07 pour les vignettes du plan 6 qui arrivent en rafale. Mesuré
+sur le rendu, leur émergence au-dessus du fond est nulle ou négative — on les
+sent, on ne les remarque pas. C'est le but : quarante bruits qui percent
+transformeraient la démonstration en jeu vidéo.
 
-Le plan 6 ne sonne qu'une vignette sur deux. Vingt sons en 3,3 secondes feraient
-une bouillie.
+Le plan 6 ne sonne qu'une vignette sur deux. Treize sons d'affilée en 3,3
+secondes feraient une bouillie.
+
+**Le défilement de la fiche, au plan 12, a été retiré.** Le mouvement se suffit à
+lui-même et le son tombait sur une réplique.
+
+Deux plans restent **nus** — le 22 et les arcs du 23 : la musique doit respirer
+avant la chute, et le dernier clic n'a de poids que sur du silence.
 
 ### D'où ils viennent
 
@@ -172,7 +177,7 @@ Pour le livrable **muet** demandé par le dossier :
 npx remotion render Immopilier out/immopilier-67s-muet.mp4 --muted
 ```
 
-Le mixage sort à −23,5 dBFS RMS, avec 2,7 dB de marge. C'est un master prudent,
+Le mixage sort à −23,7 dBFS RMS, avec 2,7 dB de marge. C'est un master prudent,
 sans limiteur. Pour viser les −16 LUFS attendus sur le web, passer le fichier
 rendu par une normalisation de loudness :
 

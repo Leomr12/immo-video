@@ -12,9 +12,9 @@ import {milliers} from '../bien';
  *
  * Voix off — « Multiplie ça par vingt annonces dans la semaine. »
  *
- * Les vingt biens sont tous différents — prix, surface et nombre de pièces —
- * parce que le plan doit se lire comme vingt annonces, pas comme une vignette
- * dupliquée vingt fois. Ils sont dans `annonces.ts`, photos comprises.
+ * Les treize biens sont tous différents — photo, prix, surface, secteur — parce
+ * que le plan doit se lire comme treize annonces, pas comme une vignette
+ * dupliquée. Ils sont dans `annonces.ts`.
  */
 
 /** Suite déterministe : deux rendus du même plan donnent exactement la même pile. */
@@ -24,24 +24,38 @@ const alea = (graine: number) => {
 };
 
 /**
- * Réparties sur une grille 5 × 4 bousculée, et non au hasard pur : le hasard
- * laisse des trous, et le script demande que la pile *remplisse* le cadre. La
- * grille déborde largement des 1920 × 1080 parce que la caméra recule jusqu'à
- * 0,82 et découvre alors près de 2 340 px de large.
+ * Treize vignettes sur trois rangées de 5, 4 et 4.
+ *
+ * Ni grille régulière ni hasard pur : la grille se lit comme un tableau, le
+ * hasard laisse des trous alors que la pile doit *remplir* le cadre. Chaque
+ * rangée couvre donc toute la largeur, mais avec son propre pas — les colonnes ne
+ * s'alignent pas d'une rangée à l'autre, et c'est ce décalage qui casse la
+ * grille sans ouvrir de vide sur les bords.
+ *
+ * Les rangées débordent largement des 1920 × 1080 : la caméra recule jusqu'à 0,82
+ * et découvre alors près de 2 340 px de large.
  */
+const PAR_RANGEE = [5, 4, 4];
+const GAUCHE = -180;
+const LARGEUR_UTILE = 2112;
+
 const VIGNETTES = ANNONCES.map((annonce, i) => {
-  const colonne = i % 5;
-  const rangee = Math.floor(i / 5);
+  let rangee = 0;
+  let colonne = i;
+  while (colonne >= PAR_RANGEE[rangee]) {
+    colonne -= PAR_RANGEE[rangee];
+    rangee += 1;
+  }
+  const pas = LARGEUR_UTILE / (PAR_RANGEE[rangee] - 1);
   return {
     ...annonce,
     i,
-    x: -180 + colonne * 528 + (alea(i + 1) - 0.5) * 170,
-    teinte: 196 + Math.round(alea(i + 121) * 34),
-    y: -70 + rangee * 372 + (alea(i + 41) - 0.5) * 130,
+    x: GAUCHE + colonne * pas + (alea(i + 1) - 0.5) * 150,
+    y: -120 + rangee * 470 + (alea(i + 41) - 0.5) * 110,
     rotation: (alea(i + 81) - 0.5) * 16, // ±8°
-    // L'ordre d'arrivée est brouillé : sans cela la pile se remplirait
-    // rangée par rangée, ce qui se lit comme un tableau, pas comme un tas.
-    rang: Math.round(alea(i + 161) * 19),
+    // L'ordre d'arrivée est brouillé : sans cela la pile se remplirait rangée par
+    // rangée, ce qui se lit comme un tableau qui se charge, pas comme un tas.
+    rang: Math.round(alea(i + 161) * 12),
   };
 });
 
@@ -98,23 +112,10 @@ export const Plan06: React.FC = () => {
               }),
             }}
           >
-            {v.photo ? (
-              <Img
-                src={staticFile(`annonces/${v.photo}`)}
-                style={{width: 380, height: 190, objectFit: 'cover', display: 'block'}}
-              />
-            ) : (
-              // Aucune photo fournie : un aplat sourd, flouté comme le serait une
-              // vignette d'annonce à cette taille. Pas de dessin — une maison
-              // stylisée à 380 px se lit comme un pictogramme, pas comme un bien.
-              <div
-                style={{
-                  height: 190,
-                  background: `linear-gradient(140deg, hsl(${v.teinte} 16% 30%), hsl(${v.teinte} 14% 18%))`,
-                  filter: 'blur(9px)',
-                }}
-              />
-            )}
+            <Img
+              src={staticFile(`annonces/${v.photo}`)}
+              style={{width: 380, height: 190, objectFit: 'cover', display: 'block'}}
+            />
             <div style={{padding: '20px 22px 24px', display: 'flex', flexDirection: 'column', gap: 8}}>
               <div style={{fontFamily: 'Geist', fontWeight: 400, fontSize: 24, color: '#b3b3bc'}}>
                 {v.pieces} pièces · {v.surface} m²

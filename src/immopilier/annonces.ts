@@ -1,25 +1,23 @@
 /**
- * Les vingt annonces du plan 6 — « Multiplie ça par vingt annonces dans la
- * semaine. »
+ * Les annonces du plan 6 — « Difficile, dans ces conditions, de savoir si le prix
+ * est juste. »
  *
- * Aucune n'a le même prix, la même surface ni le même nombre de pièces : le plan
- * doit se lire comme vingt biens différents, pas comme une vignette dupliquée.
- * Chaque prix est cohérent avec son bien et avec le prix au m² de son secteur.
+ * Treize biens, treize photos, **jamais deux fois la même**. Aucun n'a le même
+ * prix, la même surface ni le même secteur : le plan doit se lire comme treize
+ * annonces différentes, pas comme une vignette dupliquée.
  *
- * ⟦ PHOTOS MANQUANTES — `photo` pointe dans `public/annonces/`, et vaut `null`
- *   tant qu'aucune image n'est fournie : la vignette montre alors un aplat
- *   photographique neutre. Déposer les fichiers et écrire leur nom ici, rien
- *   d'autre à toucher. Voir `public/annonces/_photos.md`.
- *
- *   Le dossier rappelle de n'utiliser aucune capture d'un site d'annonces réel
- *   et aucun visage identifiable. ⟧
+ * ⟦ Les prix sont **estimés d'après la photo** — type de bien, état, standing du
+ *   quartier qu'on devine. Ils sont cohérents entre eux et avec leur marché
+ *   supposé, mais ce ne sont pas des prix relevés. Le dossier interdit tout
+ *   chiffre non vérifié à l'écran : à confirmer avant diffusion, ou à remplacer
+ *   par de vraies annonces. ⟧
  */
 
 export type Annonce = {
-  /** Lequel des cinq biens — c'est lui qui dit quelle photo va sur la vignette. */
-  readonly bien: 1 | 2 | 3 | 4 | 5;
-  /** Nom du fichier dans `public/annonces/`, ou `null` tant qu'il n'y a pas de photo. */
-  readonly photo: string | null;
+  /** Nom du fichier dans `public/annonces/`. */
+  readonly photo: string;
+  /** Ce que montre la photo — sert à retrouver l'annonce dans le dossier. */
+  readonly sujet: string;
   readonly pieces: number;
   readonly surface: number;
   readonly prix: number;
@@ -27,27 +25,30 @@ export type Annonce = {
 };
 
 export const ANNONCES: Annonce[] = [
-  {bien: 1, photo: null, pieces: 6, surface: 165, prix: 749000, secteur: 'proche gare'},
-  {bien: 2, photo: null, pieces: 5, surface: 142, prix: 585000, secteur: 'secteur recherché'},
-  {bien: 3, photo: null, pieces: 9, surface: 310, prix: 1450000, secteur: 'parc arboré'},
-  {bien: 4, photo: null, pieces: 4, surface: 96, prix: 289000, secteur: 'vue dégagée'},
-  {bien: 5, photo: null, pieces: 5, surface: 128, prix: 395000, secteur: 'cachet ancien'},
-
-  {bien: 2, photo: null, pieces: 4, surface: 108, prix: 432000, secteur: 'quartier calme'},
-  {bien: 4, photo: null, pieces: 3, surface: 74, prix: 218000, secteur: 'centre-bourg'},
-  {bien: 1, photo: null, pieces: 7, surface: 198, prix: 895000, secteur: 'sans vis-à-vis'},
-  {bien: 5, photo: null, pieces: 6, surface: 151, prix: 468000, secteur: 'poutres apparentes'},
-  {bien: 3, photo: null, pieces: 8, surface: 264, prix: 1180000, secteur: 'demeure de caractère'},
-
-  {bien: 4, photo: null, pieces: 5, surface: 119, prix: 336000, secteur: 'proche écoles'},
-  {bien: 1, photo: null, pieces: 5, surface: 134, prix: 612000, secteur: 'jardin clos'},
-  {bien: 3, photo: null, pieces: 11, surface: 382, prix: 1890000, secteur: 'orangerie'},
-  {bien: 5, photo: null, pieces: 4, surface: 88, prix: 247000, secteur: 'rénové'},
-  {bien: 2, photo: null, pieces: 6, surface: 176, prix: 678000, secteur: 'impasse'},
-
-  {bien: 1, photo: null, pieces: 4, surface: 102, prix: 498000, secteur: 'plain-pied'},
-  {bien: 4, photo: null, pieces: 6, surface: 157, prix: 412000, secteur: 'hameau'},
-  {bien: 3, photo: null, pieces: 7, surface: 229, prix: 965000, secteur: 'dépendances'},
-  {bien: 2, photo: null, pieces: 3, surface: 81, prix: 324000, secteur: 'proche commerces'},
-  {bien: 5, photo: null, pieces: 8, surface: 243, prix: 731000, secteur: 'corps de ferme'},
+  {photo: '00d51cd2-7fc3-44ce-8972-98b713bda667.png', sujet: 'villa contemporaine, toit plat, double garage',
+   pieces: 7, surface: 245, prix: 1290000, secteur: 'livraison 2024'},
+  {photo: '063ee4ae-2e5f-47b7-86d3-4aa3d3f52202.png', sujet: 'immeuble en pierre de taille, balcons en fer forgé',
+   pieces: 6, surface: 178, prix: 985000, secteur: 'pierre de taille'},
+  {photo: '0f44065c-f77c-4524-980c-7b519b340f71.png', sujet: 'séjour, murs de pierre, poutres, poêle à bois',
+   pieces: 5, surface: 132, prix: 348000, secteur: 'poutres apparentes'},
+  {photo: '29f543f9-0a79-4f7b-aaef-4476faa256af.png', sujet: 'longère de pierre, toit de tuiles rouges, grand pré',
+   pieces: 6, surface: 165, prix: 395000, secteur: 'vue dégagée'},
+  {photo: '61b56a42-7c4c-4457-9f03-576534f811ae.png', sujet: 'salon haussmannien, moulures, cheminée de marbre',
+   pieces: 4, surface: 96, prix: 1180000, secteur: 'étage élevé'},
+  {photo: '7c524161-6c2c-4d63-be4c-f447534ac8ed.png', sujet: 'maison périgourdine, mur de pierre sèche, olivier',
+   pieces: 4, surface: 108, prix: 318000, secteur: 'proche village'},
+  {photo: '86939b6e-9e86-4bfc-b4d9-97d499b745bc.png', sujet: 'fermette de pierre, volets gris, pommier, dépendance',
+   pieces: 7, surface: 192, prix: 452000, secteur: 'corps de ferme'},
+  {photo: 'a05f385a-d7b1-4c55-b930-3ce25d6e683d.png', sujet: 'double séjour haussmannien, parquet à bâtons rompus',
+   pieces: 5, surface: 124, prix: 1495000, secteur: 'double séjour'},
+  {photo: 'a8e09ead-254a-4f51-aaba-dbe0853dc3af.png', sujet: 'demeure de brique, volets vert foncé, allée de gravier',
+   pieces: 9, surface: 285, prix: 1150000, secteur: 'parc arboré'},
+  {photo: 'ac8b821a-d373-4804-9cf4-a96fd5f131a4.png', sujet: 'maison de brique rouge, bow-windows, allée pavée',
+   pieces: 5, surface: 138, prix: 545000, secteur: 'impasse'},
+  {photo: 'b650b7b2-d103-44ae-9e14-1255da56d00e.png', sujet: 'cuisine ouverte, îlot central, électroménager intégré',
+   pieces: 6, surface: 152, prix: 489000, secteur: 'cuisine équipée'},
+  {photo: 'c1b068bf-9a8e-47bf-91c9-a112e7a8ec78.png', sujet: 'bureau, fenêtre parisienne, parquet clair',
+   pieces: 3, surface: 72, prix: 742000, secteur: 'dernier étage'},
+  {photo: 'c682e30a-c00e-4b76-b4d8-412349de25e8.png', sujet: 'pavillon à enduit clair, volets gris, garage',
+   pieces: 6, surface: 158, prix: 685000, secteur: 'jardin clos'},
 ];

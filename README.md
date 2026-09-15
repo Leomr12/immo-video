@@ -44,9 +44,9 @@ Les cinq actes sont montés, soit les 24 plans du script.
 | IV. La preuve | 20–22 | 50,9 → 61,0 s |
 | V. L'appel | 23–24 | 61,0 → 67,5 s |
 
-La musique et les bruitages sont en place, et sept des douze répliques de voix
-off sont calées — voir [SON.md](SON.md). Restent à faire : les cinq dernières
-répliques, les photos d'annonces du plan 6, puis les trois recadrages livrables.
+La musique, les bruitages et les photos d'annonces sont en place, et sept des
+douze répliques de voix off sont calées — voir [SON.md](SON.md). Restent à
+faire : les cinq dernières répliques, puis les trois recadrages livrables.
 
 ## Comment le code est organisé
 
@@ -102,9 +102,8 @@ Repris du dossier, à ne pas oublier :
   d'attente. Le dossier interdit tout chiffre non vérifié à l'écran — remplacer
   par un relevé DVF réel avant diffusion. Tout est dans `src/immopilier/bien.ts`,
   un seul fichier.
-- **Les photos d'annonces du plan 6 manquent.** Les vignettes montrent un aplat
-  neutre. Voir `public/annonces/_photos.md` : déposer les images et écrire leur
-  nom dans `src/immopilier/annonces.ts`.
+- **Les prix des treize annonces du plan 6 sont estimés d'après leur photo**, pas
+  relevés. Voir `public/annonces/_photos.md`.
 - **Le lien leboncoin du plan 8** nomme un portail réel, ce que le dossier
   proscrivait. C'est un choix assumé du commanditaire ; l'annonce pointée
   n'existe pas et aucune capture du site n'apparaît à l'image.
