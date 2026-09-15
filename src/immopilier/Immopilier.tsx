@@ -6,6 +6,7 @@ import {ActeIII} from './ActeIII';
 import {ActeIV} from './ActeIV';
 import {ActeV} from './ActeV';
 import {Fond} from './composants/Fond';
+import {BandeSon} from './son/BandeSon';
 
 /**
  * Immopilier — « Géolocalise, analyse, décide »
@@ -13,6 +14,9 @@ import {Fond} from './composants/Fond';
  *
  * Voir dossier-immopilier/SCRIPT-VIDEO.md pour le conducteur complet et
  * src/immopilier/minutage.ts pour les bornes de chaque plan à l'image près.
+ *
+ * La bande-son est câblée mais muette : chaque réplique, chaque bruitage et la
+ * musique ne se montent que si leur fichier est renseigné. Voir SON.md.
  *
  * Les cinq actes sont montés.
  *   I.  L'accroche      0,0 → 8,5 s    plans 1–4
@@ -42,6 +46,8 @@ export const Immopilier: React.FC = () => {
       <Sequence name="Acte V — L'appel à l'action" from={3660} durationInFrames={390}>
         <ActeV />
       </Sequence>
+
+      <BandeSon />
     </AbsoluteFill>
   );
 };

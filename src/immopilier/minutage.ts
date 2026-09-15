@@ -43,7 +43,7 @@ export const PLANS = [
 
   {n: 20, debut: 3056, fin: 3180, fond: 'sombre', titre: 'La France en constellation'},
   {n: 21, debut: 3180, fin: 3390, fond: 'sombre', titre: 'Six bases, cinq millésimes'},
-  {n: 22, debut: 3390, fin: 3660, fond: 'sombre', titre: 'Des faits, pas une impression'},
+  {n: 22, debut: 3390, fin: 3660, fond: 'sombre', titre: 'Tu compares des adresses'},
 
   {n: 23, debut: 3660, fin: 3840, fond: 'clair', titre: 'Colle ta première annonce'},
   {n: 24, debut: 3840, fin: 4050, fond: 'clair', titre: 'Logo, bouton, curseur'},

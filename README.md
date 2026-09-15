@@ -44,8 +44,9 @@ Les cinq actes sont montés, soit les 24 plans du script.
 | IV. La preuve | 20–22 | 50,9 → 61,0 s |
 | V. L'appel | 23–24 | 61,0 → 67,5 s |
 
-Restent à faire, hors montage image : la voix off, la musique et le mixage, puis
-les trois recadrages livrables (carré, vertical, muet).
+La bande-son est câblée et muette tant qu'aucun fichier n'est déposé — voir
+[SON.md](SON.md). Restent à faire : enregistrer la voix, choisir les bruitages et
+la musique, puis les trois recadrages livrables (carré, vertical, muet).
 
 ## Comment le code est organisé
 
@@ -58,6 +59,7 @@ src/immopilier/
   fonts.ts             Geist et Geist Mono, chargés depuis public/polices/
   composants/          Fond, TypoCinetique, CarteFrance, Boussole, Halo…
   plans/               un fichier par plan
+  son/                 voix off, bruitages, musique — voir SON.md
   geo/france.ts        généré par tools/prep-france.mjs
 ```
 
