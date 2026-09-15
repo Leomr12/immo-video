@@ -36,6 +36,7 @@ const VIGNETTES = ANNONCES.map((annonce, i) => {
     ...annonce,
     i,
     x: -180 + colonne * 528 + (alea(i + 1) - 0.5) * 170,
+    teinte: 196 + Math.round(alea(i + 121) * 34),
     y: -70 + rangee * 372 + (alea(i + 41) - 0.5) * 130,
     rotation: (alea(i + 81) - 0.5) * 16, // ±8°
     // L'ordre d'arrivée est brouillé : sans cela la pile se remplirait
@@ -97,10 +98,23 @@ export const Plan06: React.FC = () => {
               }),
             }}
           >
-            <Img
-              src={staticFile(`annonces/${v.photo}`)}
-              style={{width: 380, height: 190, objectFit: 'cover', display: 'block'}}
-            />
+            {v.photo ? (
+              <Img
+                src={staticFile(`annonces/${v.photo}`)}
+                style={{width: 380, height: 190, objectFit: 'cover', display: 'block'}}
+              />
+            ) : (
+              // Aucune photo fournie : un aplat sourd, flouté comme le serait une
+              // vignette d'annonce à cette taille. Pas de dessin — une maison
+              // stylisée à 380 px se lit comme un pictogramme, pas comme un bien.
+              <div
+                style={{
+                  height: 190,
+                  background: `linear-gradient(140deg, hsl(${v.teinte} 16% 30%), hsl(${v.teinte} 14% 18%))`,
+                  filter: 'blur(9px)',
+                }}
+              />
+            )}
             <div style={{padding: '20px 22px 24px', display: 'flex', flexDirection: 'column', gap: 8}}>
               <div style={{fontFamily: 'Geist', fontWeight: 400, fontSize: 24, color: '#b3b3bc'}}>
                 {v.pieces} pièces · {v.surface} m²

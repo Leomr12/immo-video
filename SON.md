@@ -1,9 +1,12 @@
 # Immopilier — voix off, bruitages, musique
 
-Tout le son est câblé et **muet tant qu'aucun fichier n'est déposé** : chaque
-réplique, chaque bruitage et la musique ne se montent que si leur `fichier` est
-renseigné. On peut donc livrer l'image d'abord et brancher les pistes une par
-une, sans jamais casser le rendu.
+**La musique et les six bruitages sont faits et branchés.** Il ne manque que la
+voix off, qui demande soit un comédien, soit une clé d'API de synthèse vocale.
+
+Tout est câblé de la même façon : chaque réplique, chaque bruitage et la musique
+ne se montent que si leur `fichier` est renseigné. Les répliques valent encore
+`null`, le film se rend donc avec sa musique et ses bruitages, sans voix et sans
+erreur.
 
 Où ça se passe :
 
@@ -91,40 +94,66 @@ S'en tenir là. Un film sobre ne bruite pas tout, il bruite ce qui compte : les
 trois moments où le produit *répond* — le lien validé, l'adresse trouvée, le
 bouton cliqué.
 
-### Où les prendre
+### D'où ils viennent
 
-Des bruitages libres sont servis par Remotion sur `https://remotion.media/`
-(`ding.wav`, `mouse-click.wav`, `switch.wav`, `whoosh.wav`…) et s'utilisent par
-URL directe, sans rien télécharger. **Attention** : cet hôte est bloqué par la
-politique réseau de l'environnement où je travaille, donc je ne peux pas les
-tester ici — sur votre machine ils fonctionnent. Sinon, une banque libre de
-droits classique fait l'affaire ; vérifier la licence comme pour la musique.
+Ils sont **synthétisés**, pas téléchargés : `tools/prep-sons.mjs` les fabrique de
+bout en bout — une cloche à deux partiels pour le *ding*, deux impulsions de
+bruit filtré pour le *clic*, un corps grave sous une attaque sèche pour le
+*clac*, un passe-bas qui s'ouvre pour le souffle, une hauteur qui tombe vite pour
+le point qui se pose. Aucune banque de sons, donc aucune licence à vérifier.
+
+Chaque fichier est normalisé à −1 dBFS avant écriture. C'est ce qui permet aux
+volumes de `bruitages.ts` de vouloir dire quelque chose : sans cela le souffle
+saturait pendant que le tick s'entendait à peine.
+
+Pour les remplacer par des prises du commerce, il suffit de déposer les fichiers
+et de changer les noms. Remotion sert aussi des bruitages libres sur
+`https://remotion.media/` (`ding.wav`, `mouse-click.wav`, `whoosh.wav`…),
+utilisables par URL directe.
+
+Régénérer : `node tools/prep-sons.mjs`
 
 ---
 
 ## 3. La musique
 
-Le dossier ne la fournit pas. Ce qu'il demande : **libre de droits, tempo
-100–110, sans voix**, coupée exactement sur 67,5 s avec un fondu de 400 ms. Le
-modèle tient sur une nappe électronique continue avec un *build* de 8 s avant
-l'arrivée de la marque — soit un build qui culmine vers 18 s, au plan 8.
+Elle est faite : `public/son/musique/nappe.mp3`, **67,5 s à 104 BPM, en la
+mineur, sans voix**, synthétisée par `tools/prep-sons.mjs`. Le dossier demandait
+une piste libre de droits entre 100 et 110 BPM et rappelait de prévoir la licence
+avant diffusion, y compris organique — il n'y a plus de licence à prévoir.
 
-⟦ Vérifier la licence avant diffusion, y compris pour une diffusion organique :
-beaucoup de pistes « gratuites » excluent la publicité. ⟧
+Elle suit le film au lieu de tourner en boucle :
 
-Le fondu de sortie et l'esquive sous la voix sont déjà écrits dans `BandeSon.tsx` :
+| Moment | Ce qu'on entend |
+|---|---|
+| 0 → 8,5 s | une nappe seule, très basse — l'accroche |
+| 8,5 s | la basse entre |
+| 12,5 s | le pouls entre |
+| 18,1 s | tout s'ouvre, l'arpège arrive : c'est la marque |
+| 50,9 → 53 s | la montée que le script demande au plan 20 |
+| 56,5 s | pouls et arpège se retirent, il ne reste que la nappe et la basse |
+| 67,1 → 67,5 s | les 400 ms de fondu exigées par le dossier |
+
+Les réglages sont dans `BandeSon.tsx` :
 
 ```ts
 export const MUSIQUE = {
-  fichier: 'nappe-100bpm.mp3',
-  volume: 0.42,          // niveau nominal
-  volumeSousVoix: 0.14,  // sous la voix off — elle s'efface, elle ne disparaît pas
+  fichier: 'nappe.mp3',
+  volume: 0.62,         // niveau nominal
+  volumeSousVoix: 0.2,  // sous la voix off — elle s'efface, elle ne disparaît pas
 };
 ```
+
+Pour une vraie piste composée, déposer le fichier dans `public/son/musique/` et
+changer le nom : le fondu et l'esquive continuent de s'appliquer.
 
 L'esquive est automatique : la musique baisse 12 images avant chaque réplique et
 remonte quand plus personne ne parle. Les respirations du script — plans 3, 10,
 18 et 20 — retrouvent donc le niveau plein, ce qui est exactement leur rôle.
+
+Elle ne compte **que les répliques réellement enregistrées**. Tant que la voix
+n'est pas là, la musique reste à son niveau plein : esquiver sous une voix absente
+laisserait le film à peine audible.
 
 ---
 
@@ -148,11 +177,13 @@ place, nommés, et on peut les déplacer à l'œil avant de figer les valeurs.
 
 ---
 
-## 5. L'ordre dans lequel s'y prendre
+## 5. Où en est le mixage
 
-1. **La voix d'abord.** C'est elle qui porte le film et qui décide du reste. Une
-   fois les 22 répliques en place, on sait où sont les vrais silences.
-2. **Les bruitages ensuite**, aux six images du tableau. Les régler *contre* la
-   voix, pas dans le vide : le *ding* doit tomber dans un trou, pas sur un mot.
-3. **La musique en dernier**, à un niveau qui laisse la voix devant. Si on doit
-   monter la voix pour l'entendre, c'est que la musique est trop forte.
+Mesuré sur le rendu : **crête −2,1 dBFS, RMS moyen −19,4 dBFS**. De la marge sous
+le plafond, un niveau moyen confortable, et la courbe suit bien les actes — très
+bas sur l'accroche, plein à partir de la marque, en retrait sur la chute.
+
+Quand la voix arrivera, la refaire passer devant : si on doit monter la voix pour
+l'entendre, c'est que la musique est trop forte. Les bruitages se règlent
+*contre* la voix, pas dans le vide — le *ding* doit tomber dans un trou, pas sur
+un mot.

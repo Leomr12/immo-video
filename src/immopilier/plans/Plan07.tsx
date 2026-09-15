@@ -13,8 +13,10 @@ import {TypoCinetique} from '../composants/TypoCinetique';
  * Texte — « et tu n'as toujours **aucun repère** », accent `--accent-400`.
  * Voix off — « Et tu n'as toujours aucun repère de prix. »
  *
- * La croix prend le rouge sémantique `danger`, comme le ✗ du plan 17. Jamais le
- * vert, qui n'appartient pas à l'identité.
+ * La croix est bleue, pas rouge : le rouge `danger` de la charte dit une erreur,
+ * or il n'y a pas d'erreur ici — il manque une information. L'accent reste donc
+ * la seule couleur du film, et le rouge est gardé pour le ✗ du plan 17, où il
+ * sanctionne vraiment un bien.
  */
 export const Plan07: React.FC = () => {
   const frame = useCurrentFrame();
@@ -61,7 +63,7 @@ export const Plan07: React.FC = () => {
         }}
       >
         <svg viewBox="0 0 300 300" style={{width: '100%', height: '100%', overflow: 'visible'}}>
-          <circle cx="150" cy="150" r="128" fill="#b3261e" fillOpacity={0.12} />
+          <circle cx="150" cy="150" r="128" fill="#4a6bf2" fillOpacity={0.14} />
 
           {/* Les deux branches se tracent l'une après l'autre. */}
           <line
@@ -69,7 +71,7 @@ export const Plan07: React.FC = () => {
             y1="82"
             x2="218"
             y2="218"
-            stroke="#b3261e"
+            stroke="#4a6bf2"
             strokeWidth={22}
             strokeLinecap="round"
             pathLength={100}
@@ -87,7 +89,7 @@ export const Plan07: React.FC = () => {
             y1="82"
             x2="82"
             y2="218"
-            stroke="#b3261e"
+            stroke="#4a6bf2"
             strokeWidth={22}
             strokeLinecap="round"
             pathLength={100}

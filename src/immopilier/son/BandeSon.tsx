@@ -16,26 +16,39 @@ import {VOIX_OFF} from './voix-off';
  */
 
 /**
- * ⟦ La piste n'est pas fournie par le dossier. Chercher une piste libre de
- *   droits, tempo 100–110, sans voix, et vérifier la licence même pour une
- *   diffusion organique. Fichier à déposer dans `public/son/musique/`. ⟧
+ * La nappe est fabriquée par `tools/prep-sons.mjs` : 67,5 s à 104 BPM, en la
+ * mineur, sans voix, synthétisée de bout en bout. Le dossier demandait de
+ * prévoir la licence de la piste avant diffusion — il n'y en a plus à prévoir,
+ * et le tempo tombe dans la fourchette 100–110 qu'il exigeait.
+ *
+ * Elle suit le film au lieu de tourner en boucle : presque rien sur l'accroche,
+ * elle s'installe sur le coût du flou, s'ouvre à l'arrivée de la marque, monte au
+ * plan 20 comme le demande le script, se retire sous la typographie de la fin, et
+ * s'éteint en 400 ms sur la dernière image.
  */
 export const MUSIQUE = {
-  fichier: null as string | null,
+  fichier: 'nappe.mp3' as string | null,
   /** Niveau nominal, hors passages parlés. */
-  volume: 0.42,
+  volume: 0.62,
   /** Niveau sous la voix off — la musique s'efface, elle ne disparaît pas. */
-  volumeSousVoix: 0.14,
+  volumeSousVoix: 0.2,
 };
 
-/** Images où la voix off parle, pour baisser la musique dessous. */
-const PASSAGES_PARLES = VOIX_OFF.map((replique, i) => ({
-  debut: replique.debut,
-  // Faute de connaître la durée du fichier avant de l'avoir, on tient le niveau
-  // bas jusqu'à la réplique suivante. Les silences du script — plans 3, 10, 18
-  // et 20 — restent audibles parce qu'aucune réplique n'y commence.
-  fin: VOIX_OFF[i + 1] ? VOIX_OFF[i + 1].debut : 3840,
-}));
+/**
+ * Images où la voix off parle, pour baisser la musique dessous.
+ *
+ * Seules comptent les répliques réellement enregistrées : esquiver sous une voix
+ * absente laisserait la musique au niveau bas pendant tout le film, et on
+ * n'entendrait presque rien.
+ *
+ * Faute de connaître la durée d'un fichier avant de l'avoir, on tient le niveau
+ * bas jusqu'à la réplique suivante. Les silences du script — plans 3, 10, 18 et
+ * 20 — restent pleins parce qu'aucune réplique n'y commence.
+ */
+const PASSAGES_PARLES = VOIX_OFF.filter((replique) => replique.fichier).map((replique) => {
+  const suivante = VOIX_OFF.find((autre) => autre.debut > replique.debut);
+  return {debut: replique.debut, fin: suivante ? suivante.debut : 3840};
+});
 
 const parle = (frame: number) => PASSAGES_PARLES.some((p) => frame >= p.debut - 12 && frame < p.fin);
 
