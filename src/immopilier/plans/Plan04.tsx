@@ -11,6 +11,10 @@ import {TypoCinetique} from '../composants/TypoCinetique';
  *
  * Caméra : le bloc de texte continue de reculer légèrement — le mouvement que la
  * fenêtre du plan 3 avait engagé ne s'interrompt pas, il se transmet au texte.
+ *
+ * Les images 138 à 150 sont la sortie du plan : le texte monte et se dissout
+ * pendant que le chemin du plan 5 entre. Elles débordent de la durée du script
+ * et ne se voient que dans l'assemblage de l'acte, pas dans le plan vu seul.
  */
 export const Plan04: React.FC = () => {
   const frame = useCurrentFrame();
@@ -34,6 +38,16 @@ export const Plan04: React.FC = () => {
             extrapolateLeft: 'clamp',
             extrapolateRight: 'clamp',
             easing: Easing.bezier(0.2, 0.8, 0.2, 1),
+          }),
+          translate: interpolate(frame, [138, 150], ['0px 0px', '0px -70px'], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+            easing: Easing.bezier(0.4, 0, 0.2, 1),
+          }),
+          opacity: interpolate(frame, [138, 150], [1, 0], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+            easing: Easing.bezier(0.4, 0, 0.2, 1),
           }),
         }}
       >

@@ -20,8 +20,8 @@ Compositions enregistrées :
 | Id | Contenu |
 |---|---|
 | `Immopilier` | le film complet, 4050 images |
-| `Acte-I` | l'acte I seul, 510 images |
-| `Acte-I / Plan-01-Radar` … `Plan-04-Constat` | chaque plan seul, à sa durée du script |
+| `Acte-I`, `Acte-II` | un acte seul |
+| `Acte-I / Plan-01-Radar` … `Acte-II / Plan-07-Dossier` | chaque plan seul, à sa durée du script |
 
 Un plan vu seul garde le fond qu'il aura au montage : `<PlanSeul>` avance
 l'horloge du fond continu jusqu'à l'image où le plan commence.
@@ -37,7 +37,7 @@ npx remotion render Immopilier out/immopilier-67s-1080p.mp4
 | Acte | Plans | Timecode | État |
 |---|---|---|---|
 | I. L'accroche | 1–4 | 0,0 → 8,5 s | monté |
-| II. Le coût du flou | 5–7 | 8,5 → 18,1 s | à monter |
+| II. Le coût du flou | 5–7 | 8,5 → 18,1 s | monté |
 | III. Le produit | 8–19 | 18,1 → 50,9 s | à monter |
 | IV. La preuve | 20–22 | 50,9 → 61,0 s | à monter |
 | V. L'appel | 23–24 | 61,0 → 67,5 s | à monter |
