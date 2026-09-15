@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
+import {BIEN, euroM2, milliers, pourcent} from '../bien';
 
 /**
  * Plan 18 · 46,53 → 48,00 · fond sombre
@@ -9,12 +10,12 @@ import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
  */
 
 const LIGNES = [
-  ['Surface', '92 m²'],
-  ['Prix affiché', '249 000 €'],
-  ['Prix au m²', '2 707 €'],
-  ['Médiane du quartier', '2 880 €'],
-  ['Écart', '−6 %'],
-] as const;
+  ['Surface', BIEN.surface],
+  ['Prix affiché', `${milliers(BIEN.prix)} €`],
+  ['Prix au m²', euroM2(BIEN.prixM2)],
+  ['Médiane du quartier', euroM2(BIEN.medianeQuartier)],
+  ['Écart', pourcent(BIEN.ecart)],
+];
 
 export const Plan18: React.FC = () => {
   const frame = useCurrentFrame();

@@ -52,6 +52,8 @@ les trois recadrages livrables (carré, vertical, muet).
 ```
 src/immopilier/
   minutage.ts          les 24 plans, bornés à l'image près
+  bien.ts              le bien de démonstration et son quartier — source unique
+  annonces.ts          les vingt annonces du plan 6
   charte.ts            les jetons de la charte + les suites de couleurs
   fonts.ts             Geist et Geist Mono, chargés depuis public/polices/
   composants/          Fond, TypoCinetique, CarteFrance, Boussole, Halo…
@@ -91,12 +93,19 @@ Repris du dossier, à ne pas oublier :
 - **Les chiffres marqués ⟦à confirmer⟧** au script — « 34 935 communes couvertes »
   aux plans 14 et 21 — sont à recompter avant le montage. À défaut, on retire le
   chiffre et on garde la phrase.
-- **Les prix des communes du plan 15.** Le script n'en donne que deux :
-  Sainte-Foy-la-Grande 1 490 € et Port-Sainte-Foy 1 720 €. Les six autres
-  communes de la couronne sont bien les voisines réelles de
-  Saint-Avit-Saint-Nazaire, mais leurs prix sont des **valeurs d'attente**. Le
-  dossier interdit tout chiffre non vérifié à l'écran : remplacer par la médiane
-  DVF réelle, ou retirer la commune. Tout est dans `plans/Plan15.tsx`.
+- **Le bien de démonstration et son quartier** — 18 rue Servan, 75011 Paris —
+  sont **fictifs** : adresse, référence de parcelle, prix, médiane et écart sont
+  cohérents entre eux mais non vérifiés. Idem pour les prix des huit communes
+  limitrophes du plan 15 : les communes sont réelles, les prix sont des valeurs
+  d'attente. Le dossier interdit tout chiffre non vérifié à l'écran — remplacer
+  par un relevé DVF réel avant diffusion. Tout est dans `src/immopilier/bien.ts`,
+  un seul fichier.
+- **Les photos d'annonces du plan 6** sont des remplaçants dessinés, pas des
+  photographies. Voir `public/annonces/_remplacants.md` : déposer les vraies
+  images et changer les noms dans `src/immopilier/annonces.ts`.
+- **Le lien leboncoin du plan 8** nomme un portail réel, ce que le dossier
+  proscrivait. C'est un choix assumé du commanditaire ; l'annonce pointée
+  n'existe pas et aucune capture du site n'apparaît à l'image.
 - Aucune capture d'un site d'annonces réel, aucun logo de portail, aucun visage
   identifiable : les annonces des plans 6 et 8 sont fictives.
 - La musique n'est pas fournie. Piste libre de droits, 100–110 BPM, sans voix,

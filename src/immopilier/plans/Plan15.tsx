@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
+import {BIEN, COMMUNES_VOISINES, euroM2, milliers} from '../bien';
 
 /**
  * Plan 15 · 38,37 → 41,00 · fond blanc
@@ -9,22 +10,9 @@ import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
  *
  * Voix off — « Les communes autour, comparées au même mètre carré. »
  *
- * ⟦ À CONFIRMER AVANT MONTAGE — seules « Sainte-Foy-la-Grande 1 490 € » et
- *   « Port-Sainte-Foy 1 720 € » viennent du script. Les six autres communes sont
- *   bien les voisines réelles de Saint-Avit-Saint-Nazaire, mais leurs prix sont
- *   des valeurs d'attente : le dossier interdit tout chiffre non vérifié à
- *   l'écran. Remplacer par la médiane DVF réelle, ou retirer la commune. ⟧
+ * Les communes et leurs prix sont dans `bien.ts`, avec la réserve qui va avec :
+ * les voisines sont réelles, les prix sont des valeurs d'attente.
  */
-const COMMUNES = [
-  {nom: 'Sainte-Foy-la-Grande', prix: '1 490 €', duScript: true},
-  {nom: 'Port-Sainte-Foy', prix: '1 720 €', duScript: true},
-  {nom: 'Pineuilh', prix: '1 640 €', duScript: false},
-  {nom: 'Saint-Antoine-de-Breuilh', prix: '1 380 €', duScript: false},
-  {nom: 'Vélines', prix: '1 550 €', duScript: false},
-  {nom: 'Eynesse', prix: '1 310 €', duScript: false},
-  {nom: 'La Roquille', prix: '1 260 €', duScript: false},
-  {nom: 'Les Lèves-et-Thoumeyragues', prix: '1 420 €', duScript: false},
-] as const;
 
 const RAYON = 452;
 
@@ -62,13 +50,13 @@ export const Plan15: React.FC = () => {
           }}
         />
 
-        {COMMUNES.map((commune, i) => (
+        {COMMUNES_VOISINES.map((commune, i) => (
           <div
             key={commune.nom}
             style={{
               position: 'absolute',
-              left: RAYON + Math.cos((i / COMMUNES.length) * 2 * Math.PI - Math.PI / 2) * RAYON,
-              top: RAYON + Math.sin((i / COMMUNES.length) * 2 * Math.PI - Math.PI / 2) * RAYON,
+              left: RAYON + Math.cos((i / COMMUNES_VOISINES.length) * 2 * Math.PI - Math.PI / 2) * RAYON,
+              top: RAYON + Math.sin((i / COMMUNES_VOISINES.length) * 2 * Math.PI - Math.PI / 2) * RAYON,
               translate: '-50% -50%',
               // La pastille compense la rotation de la couronne : les libellés
               // restent horizontaux, seule la couronne tourne.
@@ -99,7 +87,7 @@ export const Plan15: React.FC = () => {
                 fontVariantNumeric: 'tabular-nums',
               }}
             >
-              {commune.prix}
+              {milliers(commune.prixM2)} €
             </span>
           </div>
         ))}
@@ -126,7 +114,7 @@ export const Plan15: React.FC = () => {
             fontVariantNumeric: 'tabular-nums',
           }}
         >
-          2 707 €/m²
+          {euroM2(BIEN.prixM2)}
         </div>
       </div>
     </AbsoluteFill>

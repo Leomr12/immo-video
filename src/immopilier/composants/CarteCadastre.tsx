@@ -7,8 +7,7 @@ import React from 'react';
  * incruster — et le trait reste celui de la charte : aplats `--n-50`, voirie
  * blanche, parcellaire au trait `--n-200`. Deux rendus donnent la même image.
  *
- * Le repère est celui du script : 7 Lotissement du Haut Terrier, 33220
- * Saint-Avit-Saint-Nazaire, parcelle 333780000D1121.
+ * Le bien repéré est celui de `bien.ts`.
  */
 
 /** Suite déterministe, pour que le parcellaire ne bouge pas d'un rendu à l'autre. */

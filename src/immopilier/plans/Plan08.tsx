@@ -19,8 +19,15 @@ import {Logo} from '../composants/Logo';
  * dévoile.
  */
 
-/** URL fictive, comme l'impose le dossier : aucune capture d'un site d'annonces réel. */
-const URL_ANNONCE = 'https://annonces.exemple.fr/vente/maison-92m2-33220';
+/**
+ * Le lien collé dans le champ.
+ *
+ * ⟦ Le dossier demandait une URL fictive et proscrivait de nommer un portail
+ *   réel ; le lien leboncoin est un choix explicite du commanditaire. L'annonce
+ *   pointée, elle, n'existe pas : seul le format de l'URL est réel, et aucune
+ *   capture du site n'apparaît à l'image. ⟧
+ */
+const URL_ANNONCE = 'https://leboncoin.fr/ad/ventes_immobilieres/2915408736';
 
 export const Plan08: React.FC = () => {
   const frame = useCurrentFrame();
@@ -156,12 +163,12 @@ export const Plan08: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            opacity: interpolate(frame, [206, 218], [0, 1], {
+            opacity: interpolate(frame, [222, 234], [0, 1], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
               easing: Easing.bezier(0.2, 0.8, 0.2, 1),
             }),
-            scale: interpolate(frame, [206, 222], [0.5, 1], {
+            scale: interpolate(frame, [222, 238], [0.5, 1], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
               easing: Easing.bezier(0.2, 0.8, 0.2, 1),

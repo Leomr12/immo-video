@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
+import {BIEN} from '../bien';
 import {CarteCadastre, PARCELLE} from '../composants/CarteCadastre';
 import {Curseur} from '../composants/Curseur';
 import {TypoCinetique} from '../composants/TypoCinetique';
@@ -118,13 +119,13 @@ export const Plan09: React.FC = () => {
           }}
         >
           <div style={{fontFamily: 'Geist', fontWeight: 600, fontSize: 52, letterSpacing: '-0.02em', color: '#121216'}}>
-            7 Lotissement du Haut Terrier
+            {BIEN.adresse}
           </div>
           <div style={{fontFamily: 'Geist', fontWeight: 400, fontSize: 36, color: '#4d4d57'}}>
-            33220 Saint-Avit-Saint-Nazaire
+            {BIEN.codePostal} {BIEN.ville}
           </div>
           <div style={{fontFamily: 'Geist Mono', fontWeight: 400, fontSize: 28, color: '#6a6a75', marginTop: 8}}>
-            Parcelle 333780000D1121 · 1 042 m²
+            Parcelle {BIEN.parcelle} · {BIEN.contenance}
           </div>
         </div>
       </AbsoluteFill>

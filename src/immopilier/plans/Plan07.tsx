@@ -5,29 +5,23 @@ import {TypoCinetique} from '../composants/TypoCinetique';
 /**
  * Plan 7 · 15,82 → 18,12 · fond sombre
  *
- * Un grand dossier bleu se pose au premier plan et s'ouvre : il est vide. Deux ou
- * trois mouches en sortent — le clin d'œil du modèle, gardé tel quel.
+ * Une grande croix se trace au centre : le repère de prix qui manque. Le script
+ * demandait un dossier vide d'où sortent des mouches ; la croix dit la même
+ * chose plus vite et sans gag, ce qui convient mieux à une phrase aussi sèche
+ * que « tu n'as toujours aucun repère ».
  *
  * Texte — « et tu n'as toujours **aucun repère** », accent `--accent-400`.
  * Voix off — « Et tu n'as toujours aucun repère de prix. »
  *
- * Le rabat bascule vraiment vers l'avant : il lui faut une `perspective` sur le
- * conteneur, sans quoi la rotation en X n'est qu'un écrasement vertical.
+ * La croix prend le rouge sémantique `danger`, comme le ✗ du plan 17. Jamais le
+ * vert, qui n'appartient pas à l'identité.
  */
-
-/** Les trois mouches : chacune sort du dossier sur sa propre trajectoire. */
-const MOUCHES = [
-  {depart: 44, x: -110, montee: -330, vitesse: 0.22, amplitude: 40},
-  {depart: 56, x: 60, montee: -420, vitesse: 0.17, amplitude: 54},
-  {depart: 68, x: 160, montee: -280, vitesse: 0.27, amplitude: 30},
-] as const;
-
 export const Plan07: React.FC = () => {
   const frame = useCurrentFrame();
 
   return (
-    <AbsoluteFill name="Plan 7 — Le dossier vide" style={{alignItems: 'center', justifyContent: 'center'}}>
-      <AbsoluteFill name="Constat" style={{alignItems: 'center', justifyContent: 'flex-start', paddingTop: 140}}>
+    <AbsoluteFill name="Plan 7 — Aucun repère" style={{alignItems: 'center', justifyContent: 'center'}}>
+      <AbsoluteFill name="Constat" style={{alignItems: 'center', justifyContent: 'flex-start', paddingTop: 196}}>
         <div style={{width: 1560}}>
           <TypoCinetique
             mots={[
@@ -48,92 +42,66 @@ export const Plan07: React.FC = () => {
 
       <div
         style={{
-          position: 'relative',
-          width: 700,
-          height: 470,
-          marginTop: 210,
-          perspective: 1400,
-          // Le dossier se pose au premier plan : il descend et s'arrête net.
-          translate: interpolate(frame, [0, 26], ['0px -300px', '0px 0px'], {
+          position: 'absolute',
+          top: 468,
+          width: 392,
+          height: 392,
+          // La croix arrive en reculant légèrement, comme frappée sur le cadre.
+          scale: interpolate(frame, [22, 44], [1.22, 1], {
             extrapolateLeft: 'clamp',
             extrapolateRight: 'clamp',
-            easing: Easing.bezier(0.2, 0.8, 0.2, 1),
-          }),
-          scale: interpolate(frame, [0, 26], [1.3, 1], {
-            extrapolateLeft: 'clamp',
-            extrapolateRight: 'clamp',
-            easing: Easing.bezier(0.2, 0.8, 0.2, 1),
+            easing: Easing.bezier(0.16, 1, 0.3, 1),
             output: 'perceptual-scale',
+          }),
+          opacity: interpolate(frame, [22, 36], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+            easing: Easing.bezier(0.2, 0.8, 0.2, 1),
           }),
         }}
       >
-        {/* L'onglet, puis le fond du dossier : une cavité sombre, vide. */}
-        <div
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            width: 280,
-            height: 62,
-            borderRadius: '18px 26px 0 0',
-            background: 'linear-gradient(180deg, #4a6bf2, #2e4fe6)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            inset: '52px 0 0 0',
-            borderRadius: '10px 22px 26px 26px',
-            background: 'linear-gradient(180deg, #1b3296 0%, #16255f 42%, #101a44 100%)',
-            boxShadow: 'inset 0 34px 60px rgba(0,0,0,0.55), 0 40px 90px rgba(0,0,0,0.6)',
-          }}
-        />
+        <svg viewBox="0 0 300 300" style={{width: '100%', height: '100%', overflow: 'visible'}}>
+          <circle cx="150" cy="150" r="128" fill="#b3261e" fillOpacity={0.12} />
 
-        {/* Le rabat avant, qui bascule vers le spectateur et découvre le vide. */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: '150px 0 0 0',
-            borderRadius: '18px 18px 26px 26px',
-            background: 'linear-gradient(180deg, #4a6bf2, #2e4fe6 62%, #2340bd)',
-            boxShadow: '0 22px 50px rgba(0,0,0,0.5)',
-            transformOrigin: 'bottom center',
-            rotate: `x ${interpolate(frame, [22, 62], [0, 76], {
-              extrapolateLeft: 'clamp',
-              extrapolateRight: 'clamp',
-              easing: Easing.bezier(0.2, 0.8, 0.2, 1),
-            })}deg`,
-          }}
-        />
+          {/* Les deux branches se tracent l'une après l'autre. */}
+          <line
+            x1="82"
+            y1="82"
+            x2="218"
+            y2="218"
+            stroke="#b3261e"
+            strokeWidth={22}
+            strokeLinecap="round"
+            pathLength={100}
+            strokeDasharray={100}
+            style={{
+              strokeDashoffset: interpolate(frame, [26, 48], [100, 0], {
+                extrapolateLeft: 'clamp',
+                extrapolateRight: 'clamp',
+                easing: Easing.bezier(0.16, 1, 0.3, 1),
+              }),
+            }}
+          />
+          <line
+            x1="218"
+            y1="82"
+            x2="82"
+            y2="218"
+            stroke="#b3261e"
+            strokeWidth={22}
+            strokeLinecap="round"
+            pathLength={100}
+            strokeDasharray={100}
+            style={{
+              strokeDashoffset: interpolate(frame, [40, 62], [100, 0], {
+                extrapolateLeft: 'clamp',
+                extrapolateRight: 'clamp',
+                easing: Easing.bezier(0.16, 1, 0.3, 1),
+              }),
+            }}
+          />
+        </svg>
       </div>
-
-      {MOUCHES.map((mouche, i) => (
-        <div
-          key={i}
-          style={{
-            position: 'absolute',
-            width: 13,
-            height: 13,
-            borderRadius: 999,
-            backgroundColor: '#8b8b96',
-            boxShadow: '0 0 12px rgba(0,0,0,0.9)',
-            translate: `${mouche.x + Math.sin(frame * mouche.vitesse) * mouche.amplitude}px ${
-              180 +
-              mouche.montee *
-                interpolate(frame, [mouche.depart, mouche.depart + 70], [0, 1], {
-                  extrapolateLeft: 'clamp',
-                  extrapolateRight: 'clamp',
-                  easing: Easing.bezier(0.33, 0, 0.67, 1),
-                }) +
-              Math.cos(frame * mouche.vitesse * 1.7) * 16
-            }px`,
-            opacity: interpolate(frame, [mouche.depart, mouche.depart + 8], [0, 1], {
-              extrapolateLeft: 'clamp',
-              extrapolateRight: 'clamp',
-            }),
-          }}
-        />
-      ))}
     </AbsoluteFill>
   );
 };

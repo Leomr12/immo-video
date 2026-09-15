@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
+import {BIEN, BIEN_ECARTE, euroM2, pourcent} from '../bien';
 import {FenetreNavigateur} from '../composants/FenetreNavigateur';
 
 /**
@@ -17,18 +18,22 @@ import {FenetreNavigateur} from '../composants/FenetreNavigateur';
 
 const BIENS = [
   {
-    prix: '2 707 €/m²',
-    ecart: '−6 % sous le quartier',
+    pieces: BIEN.pieces,
+    surface: BIEN.surface,
+    prix: euroM2(BIEN.prixM2),
+    ecart: `${pourcent(BIEN.ecart)} sous le quartier`,
     retenu: true,
     depart: 16,
   },
   {
-    prix: '3 210 €/m²',
-    ecart: '+12 % au-dessus',
+    pieces: BIEN_ECARTE.pieces,
+    surface: BIEN_ECARTE.surface,
+    prix: euroM2(BIEN_ECARTE.prixM2),
+    ecart: `${pourcent(BIEN_ECARTE.ecart)} au-dessus`,
     retenu: false,
     depart: 34,
   },
-] as const;
+];
 
 export const Plan17: React.FC = () => {
   const frame = useCurrentFrame();
@@ -70,7 +75,7 @@ export const Plan17: React.FC = () => {
 
                 <div style={{padding: '30px 34px 34px', display: 'flex', flexDirection: 'column', gap: 12}}>
                   <div style={{fontFamily: 'Geist', fontWeight: 400, fontSize: 28, color: '#6a6a75'}}>
-                    3 pièces · 92 m²
+                    {bien.pieces} pièces · {bien.surface}
                   </div>
                   <div
                     style={{

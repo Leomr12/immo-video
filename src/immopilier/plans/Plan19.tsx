@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
+import {BIEN} from '../bien';
 
 /**
  * Plan 19 · 48,00 → 50,93 · fond sombre
@@ -11,7 +12,10 @@ import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
  * commune. »
  */
 
-const REPONSE = '6 % sous la médiane du quartier, sur 162 ventes retenues depuis 2020.'.split(' ');
+const REPONSE =
+  `${Math.abs(BIEN.ecart)} % sous la médiane du quartier, sur ${BIEN.ventesRetenues} ventes retenues depuis 2020.`.split(
+    ' ',
+  );
 
 export const Plan19: React.FC = () => {
   const frame = useCurrentFrame();

@@ -84,7 +84,7 @@ export const Plan24: React.FC = () => {
           }),
         }}
       >
-        immobilier.topbusiness.fr
+        www.immopilier.com
       </div>
 
       <div

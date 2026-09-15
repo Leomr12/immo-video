@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
+import {BIEN} from '../bien';
 import {Compteur} from '../composants/Compteur';
 
 /**
@@ -9,6 +10,10 @@ import {Compteur} from '../composants/Compteur';
  * du modèle. Les chiffres montent en compteur sur 900 ms.
  *
  * Pas de voix off : c'est une respiration, le son porte seul.
+ *
+ * Le corps des chiffres est descendu à 60 : à 86, « 10 360 €/m² » débordait de
+ * sa tuile. Les tuiles ont aussi été élargies — c'est le prix parisien qui a
+ * deux chiffres de plus que l'exemple rural du script.
  */
 export const Plan10: React.FC = () => {
   const frame = useCurrentFrame();
@@ -16,7 +21,7 @@ export const Plan10: React.FC = () => {
   return (
     <AbsoluteFill
       name="Plan 10 — Trois tuiles de statistiques"
-      style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 44}}
+      style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 38}}
     >
       {[
         {libelle: 'Prix médian', depart: 0},
@@ -26,8 +31,8 @@ export const Plan10: React.FC = () => {
         <div
           key={tuile.libelle}
           style={{
-            width: 470,
-            padding: '52px 54px 58px',
+            width: 542,
+            padding: '48px 46px 54px',
             borderRadius: 32,
             backgroundColor: '#17171c',
             border: '1px solid #33333a',
@@ -52,15 +57,15 @@ export const Plan10: React.FC = () => {
             style={{
               fontFamily: 'Geist',
               fontWeight: 600,
-              fontSize: 86,
+              fontSize: 60,
               letterSpacing: '-0.03em',
               lineHeight: 1.05,
               color: '#f6f6f8',
             }}
           >
-            {i === 0 ? <Compteur vers={1854} depart={10} duree={54} suffixe={' €/m²'} /> : null}
-            {i === 1 ? <Compteur vers={162} depart={16} duree={54} /> : null}
-            {i === 2 ? <Compteur vers={-6} depart={22} duree={54} suffixe={' %'} /> : null}
+            {i === 0 ? <Compteur vers={BIEN.medianeQuartier} depart={10} duree={54} suffixe={' €/m²'} /> : null}
+            {i === 1 ? <Compteur vers={BIEN.ventesRetenues} depart={16} duree={54} /> : null}
+            {i === 2 ? <Compteur vers={BIEN.ecart} depart={22} duree={54} suffixe={' %'} /> : null}
           </div>
         </div>
       ))}

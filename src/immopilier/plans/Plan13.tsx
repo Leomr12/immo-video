@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
+import {BIEN} from '../bien';
 import {EtiquetteDPE} from '../composants/EtiquetteDPE';
 
 /**
@@ -20,16 +21,16 @@ const BLOCS = [
   {
     titre: 'Parcelle',
     lignes: [
-      ['Référence', '333780000D1121'],
-      ['Contenance', '1 042 m²'],
+      ['Référence', BIEN.parcelle],
+      ['Contenance', BIEN.contenance],
     ],
   },
   {
     titre: 'Bâtiment',
     lignes: [
-      ['Année de construction', '1974'],
-      ['Emprise au sol', '118 m²'],
-      ['Niveaux', '2'],
+      ['Année de construction', BIEN.anneeConstruction],
+      ['Emprise au sol', BIEN.empriseAuSol],
+      ['Niveaux', BIEN.niveaux],
     ],
   },
   {titre: 'Diagnostic de performance énergétique', lignes: []},
@@ -38,10 +39,10 @@ const BLOCS = [
     lignes: [
       ['Retrait-gonflement des argiles', 'Aléa moyen'],
       ['Inondation', 'Hors zone'],
-      ['Zonage PLU', 'UB'],
+      ['Zonage PLU', BIEN.zonagePlu],
     ],
   },
-] as const;
+];
 
 export const Plan13: React.FC = () => {
   const frame = useCurrentFrame();
@@ -90,16 +91,16 @@ export const Plan13: React.FC = () => {
 
           {i === 2 ? (
             <div style={{display: 'flex', alignItems: 'center', gap: 60}}>
-              <EtiquetteDPE retenue="D" depart={i * 36 + 4} />
+              <EtiquetteDPE retenue={BIEN.dpe} depart={i * 36 + 4} />
               <div style={{display: 'flex', flexDirection: 'column', gap: 12}}>
                 <div style={{fontFamily: 'Geist', fontWeight: 400, fontSize: 30, color: '#b3b3bc'}}>
                   Étiquette retenue
                 </div>
                 <div style={{fontFamily: 'Geist', fontWeight: 600, fontSize: 130, lineHeight: 1, color: '#f3dc2a'}}>
-                  D
+                  {BIEN.dpe}
                 </div>
                 <div style={{fontFamily: 'Geist', fontWeight: 400, fontSize: 28, color: '#8b8b96'}}>
-                  diagnostic de 2022
+                  diagnostic de {BIEN.anneeDpe}
                 </div>
               </div>
             </div>
