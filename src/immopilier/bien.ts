@@ -38,6 +38,15 @@ export const BIEN = {
   zonagePlu: 'UG',
 } as const;
 
+/**
+ * Le nombre de communes couvertes, affiché aux plans 14 et 21.
+ *
+ * ⟦ Chiffre donné par le commanditaire. Le dossier interdit tout chiffre non
+ *   vérifié à l'écran : le recompter avant diffusion, ou retirer le chiffre et
+ *   garder la phrase. ⟧
+ */
+export const COMMUNES_COUVERTES = 30225;
+
 /** Le bien écarté du plan 17 : au-dessus de la médiane du quartier. */
 export const BIEN_ECARTE = {
   pieces: 3,

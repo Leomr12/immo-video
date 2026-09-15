@@ -16,18 +16,15 @@ import {VOIX_OFF} from './voix-off';
  */
 
 /**
- * La nappe est fabriquée par `tools/prep-sons.mjs` : 67,5 s à 104 BPM, en la
- * mineur, sans voix, synthétisée de bout en bout. Le dossier demandait de
- * prévoir la licence de la piste avant diffusion — il n'y en a plus à prévoir,
- * et le tempo tombe dans la fourchette 100–110 qu'il exigeait.
- *
- * Elle suit le film au lieu de tourner en boucle : presque rien sur l'accroche,
- * elle s'installe sur le coût du flou, s'ouvre à l'arrivée de la marque, monte au
- * plan 20 comme le demande le script, se retire sous la typographie de la fin, et
- * s'éteint en 400 ms sur la dernière image.
+ * ⟦ La musique est fournie par le commanditaire. Déposer le fichier dans
+ *   `public/son/musique/` et écrire son nom ici : le fondu d'ouverture, l'esquive
+ *   sous la voix et les 400 ms de fermeture exigées par le dossier s'appliquent
+ *   alors d'eux-mêmes. Le dossier demande une piste sans voix, entre 100 et
+ *   110 BPM, et rappelle de vérifier la licence même pour une diffusion
+ *   organique. ⟧
  */
 export const MUSIQUE = {
-  fichier: 'nappe.mp3' as string | null,
+  fichier: null as string | null,
   /** Niveau nominal, hors passages parlés. */
   volume: 0.62,
   /** Niveau sous la voix off — la musique s'efface, elle ne disparaît pas. */

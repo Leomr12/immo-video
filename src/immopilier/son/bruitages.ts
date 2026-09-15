@@ -6,11 +6,13 @@
  * le souffle montant du plan 8. En rester là : un film sobre ne se bruite pas
  * partout, il bruite ce qui compte.
  *
- * Les fichiers sont fabriqués par `tools/prep-sons.mjs`, synthétisés à partir de
- * rien : aucune banque de sons, donc aucune licence à vérifier. Pour les
- * remplacer par des prises du commerce, il suffit de changer les noms.
+ * `fichier` vaut `null` quand aucun son n'est branché — c'est le cas
+ * aujourd'hui : les bruitages sont fournis par le commanditaire. Déposer les
+ * fichiers dans `public/son/bruitages/` et écrire leur nom ici suffit à les
+ * monter, chacun à l'image indiquée.
  *
- * `fichier` vaut `null` quand aucun son n'est branché.
+ * `tools/prep-sons.mjs` sait fabriquer un jeu d'attente si on en a besoin pour
+ * juger du rythme avant d'avoir les vrais sons.
  */
 export type Bruitage = {
   /** Image à laquelle le son démarre dans le film. */
@@ -22,12 +24,12 @@ export type Bruitage = {
 };
 
 export const BRUITAGES: Bruitage[] = [
-  {image: 318, role: 'plan 3 — le clac de pause, quand la fenêtre se fige', fichier: 'clac.mp3', volume: 0.58},
-  {image: 1087, role: 'plan 8 — le souffle montant sur l’arrivée de la marque', fichier: 'souffle.mp3', volume: 0.44},
-  {image: 1309, role: 'plan 8 — le ding propre sur le ✓', fichier: 'ding.mp3', volume: 0.66},
-  {image: 1476, role: 'plan 9 — le point qui se pose sur la parcelle', fichier: 'pose.mp3', volume: 0.6},
-  {image: 1591, role: 'plan 9 — le clic du curseur sur le ✓', fichier: 'clic.mp3', volume: 0.7},
-  {image: 3984, role: 'plan 24 — le clic de souris final', fichier: 'clic.mp3', volume: 0.72},
+  {image: 318, role: 'plan 3 — le clac de pause, quand la fenêtre se fige', fichier: null, volume: 0.58},
+  {image: 1087, role: 'plan 8 — le souffle montant sur l’arrivée de la marque', fichier: null, volume: 0.44},
+  {image: 1309, role: 'plan 8 — le ding propre sur le ✓', fichier: null, volume: 0.66},
+  {image: 1476, role: 'plan 9 — le point qui se pose sur la parcelle', fichier: null, volume: 0.6},
+  {image: 1591, role: 'plan 9 — le clic du curseur sur le ✓', fichier: null, volume: 0.7},
+  {image: 3984, role: 'plan 24 — le clic de souris final', fichier: null, volume: 0.72},
 ];
 
 /**
@@ -36,7 +38,7 @@ export const BRUITAGES: Bruitage[] = [
  * un balayage, pas une mitraille.
  */
 export const TICKS_RADAR = {
-  fichier: 'tick.mp3' as string | null,
+  fichier: null as string | null,
   volume: 0.24,
   images: [6, 24, 42, 60, 78, 96, 114, 132],
 };

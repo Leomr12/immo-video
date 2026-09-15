@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
+import {COMMUNES_COUVERTES} from '../bien';
 import {Compteur} from '../composants/Compteur';
 import {FicheAdresse} from '../composants/FicheAdresse';
 
@@ -11,9 +12,8 @@ import {FicheAdresse} from '../composants/FicheAdresse';
  *
  * Voix off — « Tout vient des bases publiques de l'État. Rien n'est estimé. »
  *
- * ⟦ « Communes couvertes 34 935 » est l'un des trois chiffres marqués « à
- *   confirmer » au script : il doit être recompté avant le montage. Si le compte
- *   n'est pas sûr, on retire le chiffre et on garde la phrase. ⟧
+ * ⟦ Le nombre de communes vient du commanditaire — voir `COMMUNES_COUVERTES`
+ *   dans `bien.ts`. À recompter avant diffusion. ⟧
  */
 export const Plan14: React.FC = () => {
   const frame = useCurrentFrame();
@@ -65,7 +65,7 @@ export const Plan14: React.FC = () => {
               }}
             >
               {i === 0 ? <Compteur vers={1284} depart={compteur.depart + 4} duree={54} /> : null}
-              {i === 1 ? <Compteur vers={34935} depart={compteur.depart + 4} duree={54} /> : null}
+              {i === 1 ? <Compteur vers={COMMUNES_COUVERTES} depart={compteur.depart + 4} duree={54} /> : null}
               {i === 2 ? '2020 → 2024' : null}
             </div>
           </div>

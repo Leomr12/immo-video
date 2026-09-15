@@ -1,5 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame} from 'remotion';
+import {COMMUNES_COUVERTES} from '../bien';
 import {Compteur} from '../composants/Compteur';
 import {Halo} from '../composants/Halo';
 
@@ -15,14 +16,14 @@ import {Halo} from '../composants/Halo';
  * exception que POLICES.md accorde à la graisse Bold. La ligne des sources est
  * en Geist 300, comme prévu pour les mentions discrètes.
  *
- * ⟦ « 34 935 communes » est l'un des trois chiffres marqués « à confirmer » au
- *   script : à recompter avant le montage, ou à retirer en gardant la phrase. ⟧
+ * ⟦ Le nombre de communes vient du commanditaire — voir `COMMUNES_COUVERTES`
+ *   dans `bien.ts`. À recompter avant diffusion. ⟧
  */
 
 const CHIFFRES = [
   {valeur: 6, libelle: 'bases publiques', depart: 0},
   {valeur: 5, libelle: 'millésimes de ventes', depart: 66},
-  {valeur: 34935, libelle: 'communes', depart: 132},
+  {valeur: COMMUNES_COUVERTES, libelle: 'communes', depart: 132},
 ] as const;
 
 export const Plan21: React.FC = () => {

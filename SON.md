@@ -1,21 +1,20 @@
 # Immopilier — voix off, bruitages, musique
 
-**La musique et les six bruitages sont faits et branchés.** Il ne manque que la
-voix off, qui demande soit un comédien, soit une clé d'API de synthèse vocale.
+**Sept des douze répliques sont montées et calées.** Les bruitages et la musique
+sont attendus du commanditaire ; leurs emplacements sont prêts et vides.
 
 Tout est câblé de la même façon : chaque réplique, chaque bruitage et la musique
-ne se montent que si leur `fichier` est renseigné. Les répliques valent encore
-`null`, le film se rend donc avec sa musique et ses bruitages, sans voix et sans
-erreur.
+ne se montent que si leur `fichier` est renseigné. Le film se rend donc avec les
+sept voix disponibles, sans musique et sans erreur.
 
 Où ça se passe :
 
 ```
-public/son/voix/          les répliques enregistrées
-public/son/bruitages/     les cinq bruitages
-public/son/musique/       la piste
+public/son/voix/          vo-01.mp3 … vo-07.mp3 — les prises livrées
+public/son/bruitages/     vide, en attente
+public/son/musique/       vide, en attente
 src/immopilier/son/
-  voix-off.ts             les 22 répliques et leur image de départ
+  voix-off.ts             les 12 répliques du conducteur et leur image de départ
   bruitages.ts            les bruitages et leur image
   BandeSon.tsx            le montage son, monté dans la composition
 ```
@@ -24,50 +23,58 @@ src/immopilier/son/
 
 ## 1. La voix off
 
-### Pourquoi un fichier par réplique
+### Ce qui est calé
 
-`voix-off.ts` porte **22 répliques**, une par entrée, avec son texte et son image
-de départ. Ces images sont celles de `dossier-immopilier/sous-titres.srt`,
-relevées une fois et non ressaisies : la voix et le sous-titrage partent donc
-exactement ensemble, ce qui compte pour la version verticale, celle qui se
-regarde sans le son.
+Le conducteur du commanditaire compte douze répliques. Les sept premières sont
+en place, aux timecodes donnés — vérifié sur le rendu, elles démarrent bien à
+0,00 s · 6,00 · 12,00 · 18,00 · 21,00 · 27,00 · 36,00, et aucune ne déborde sur
+la suivante :
 
-Une bande unique de 67,5 s obligerait à tout réenregistrer pour corriger un mot,
-et à recaler à l'oreille. Avec un fichier par réplique, on refait la phrase 12 et
-on ne touche à rien d'autre.
+| № | Timecode | Durée | Marge avant la suivante | Fichier |
+|---|---|---|---|---|
+| 1 | 0:00 | 3,16 s | 2,8 s | `vo-01.mp3` |
+| 2 | 0:06 | 3,37 s | 2,6 s | `vo-02.mp3` |
+| 3 | 0:12 | 3,00 s | 3,0 s | `vo-03.mp3` |
+| 4 | 0:18 | 2,77 s | 0,2 s | `vo-04.mp3` |
+| 5 | 0:21 | 2,93 s | 3,1 s | `vo-05.mp3` |
+| 6 | 0:27 | 5,15 s | 3,8 s | `vo-06.mp3` |
+| 7 | 0:36 | 3,71 s | 2,3 s | `vo-07.mp3` |
+| 8 à 12 | 0:42 → 1:03 | — | — | ⟦ manquants ⟧ |
 
-### Enregistrer
+La réplique 4 n'a que **0,2 s** de marge avant la 5 : c'est la seule à surveiller
+si elle est réenregistrée un peu plus lente.
 
-**Avec un comédien** — direction du script : voix masculine ou féminine, 25–40
-ans, sans emphase commerciale. Les questions (« à la main ? », « Simple, non ? »)
-se posent presque à voix basse. Les cinq étapes du plan 5 se détachent : un point
-après chaque étape, pas de virgule. Faire lire réplique par réplique, dans
-l'ordre de `voix-off.ts`, et livrer un fichier par numéro.
+### Comment l'ordre a été établi
 
-**En synthèse vocale** — ElevenLabs en `eleven_multilingual_v2`, une requête par
-réplique, écriture directe dans `public/son/voix/`. Il faut une clé
-`ELEVENLABS_API_KEY`. Réglages de départ : `stability` 0,5 · `similarity_boost`
-0,75 · `style` 0,3 — au-delà, la voix « joue » et perd le ton posé du script.
-Prendre une voix française native, pas une voix anglaise en mode multilingue :
-l'accent s'entend sur « parcelle », « quartier », « millésimes ».
+Les fichiers livrés portaient l'heure de génération dans leur nom
+(`ElevenLabs_2026-09-15T16_13_19_…`). Ils ont été renommés `vo-01` à `vo-07` de
+la plus ancienne à la plus récente, c'est-à-dire dans l'ordre du conducteur.
 
-### Brancher
+⟦ Je ne peux pas écouter les fichiers : la correspondance repose sur l'ordre des
+horodatages, recoupé avec la durée et le nombre de pauses de chaque prise —
+`vo-06` est à la fois la plus longue (5,15 s) et la seule à trois pauses
+internes, ce qui correspond exactement à la réplique 6 et à ses trois signes de
+ponctuation. Le recoupement est net, mais **une écoute de contrôle s'impose** :
+ouvrir le Studio, la timeline les montre à leur place, nommées. ⟧
 
-Déposer les fichiers, puis renseigner leur nom :
+### Ajouter les répliques 8 à 12
+
+Déposer les fichiers dans `public/son/voix/` et écrire leur nom :
 
 ```ts
 // src/immopilier/son/voix-off.ts
-{n: 1, debut: 0, texte: "Une annonce qui te plaît.", fichier: 'vo-01.mp3'},
+{n: 8, debut: 2520, timecode: '0:42', fichier: 'vo-08.mp3',
+ texte: 'Parmi des dizaines de transactions, …'},
 ```
 
-C'est tout. La réplique se monte à son image, la musique baisse dessous.
+C'est tout. La réplique se monte à son image, la musique baissera dessous quand
+il y en aura une.
 
 ### Si une réplique déborde
 
-Les durées du script laissent de la marge, mais une voix lente peut mordre sur la
-réplique suivante. Deux réponses, dans cet ordre : refaire la prise un peu plus
-serrée, ou décaler `debut` de quelques images. **Ne pas** allonger le plan : les
-67,5 s et le minutage des 24 plans sont le contrat du script.
+Refaire la prise un peu plus serrée, ou décaler `debut` de quelques images. **Ne
+pas** allonger le plan : les 67,5 s et le minutage des 24 plans sont le contrat
+du script.
 
 ---
 
@@ -75,7 +82,7 @@ serrée, ou décaler `debut` de quelques images. **Ne pas** allonger le plan : l
 
 La charte n'en retient que trois — le *tick* du radar, le *ding* de validation,
 le *clic* final. Le script en ajoute deux : le *clac* de pause du plan 3 et le
-souffle montant du plan 8. `bruitages.ts` les place à l'image :
+souffle montant du plan 8. `bruitages.ts` les attend à l'image :
 
 | Image | Temps | Ce qu'on entend |
 |---|---|---|
@@ -94,47 +101,27 @@ S'en tenir là. Un film sobre ne bruite pas tout, il bruite ce qui compte : les
 trois moments où le produit *répond* — le lien validé, l'adresse trouvée, le
 bouton cliqué.
 
-### D'où ils viennent
+Pour les brancher : déposer les fichiers dans `public/son/bruitages/` et écrire
+leur nom dans `bruitages.ts`. Penser à normaliser les prises entre elles, sinon
+les volumes du tableau ne veulent plus rien dire : un souffle qui sature pendant
+qu'un tick s'entend à peine ne se règle pas au volume.
 
-Ils sont **synthétisés**, pas téléchargés : `tools/prep-sons.mjs` les fabrique de
-bout en bout — une cloche à deux partiels pour le *ding*, deux impulsions de
-bruit filtré pour le *clic*, un corps grave sous une attaque sèche pour le
-*clac*, un passe-bas qui s'ouvre pour le souffle, une hauteur qui tombe vite pour
-le point qui se pose. Aucune banque de sons, donc aucune licence à vérifier.
-
-Chaque fichier est normalisé à −1 dBFS avant écriture. C'est ce qui permet aux
-volumes de `bruitages.ts` de vouloir dire quelque chose : sans cela le souffle
-saturait pendant que le tick s'entendait à peine.
-
-Pour les remplacer par des prises du commerce, il suffit de déposer les fichiers
-et de changer les noms. Remotion sert aussi des bruitages libres sur
-`https://remotion.media/` (`ding.wav`, `mouse-click.wav`, `whoosh.wav`…),
-utilisables par URL directe.
-
-Régénérer : `node tools/prep-sons.mjs`
+`tools/prep-sons.mjs` sait fabriquer un jeu d'attente synthétisé, si on veut
+juger du rythme avant d'avoir les vrais sons.
 
 ---
 
 ## 3. La musique
 
-Elle est faite : `public/son/musique/nappe.mp3`, **67,5 s à 104 BPM, en la
-mineur, sans voix**, synthétisée par `tools/prep-sons.mjs`. Le dossier demandait
-une piste libre de droits entre 100 et 110 BPM et rappelait de prévoir la licence
-avant diffusion, y compris organique — il n'y a plus de licence à prévoir.
+⟦ Attendue du commanditaire. ⟧ Ce que le dossier demande : **libre de droits,
+tempo 100–110, sans voix**, coupée exactement sur 67,5 s. Le modèle tient sur une
+nappe électronique continue avec un *build* de 8 s avant l'arrivée de la marque —
+soit un build qui culmine vers 18 s, au plan 8.
 
-Elle suit le film au lieu de tourner en boucle :
+⟦ Vérifier la licence avant diffusion, y compris organique : beaucoup de pistes
+« gratuites » excluent la publicité. ⟧
 
-| Moment | Ce qu'on entend |
-|---|---|
-| 0 → 8,5 s | une nappe seule, très basse — l'accroche |
-| 8,5 s | la basse entre |
-| 12,5 s | le pouls entre |
-| 18,1 s | tout s'ouvre, l'arpège arrive : c'est la marque |
-| 50,9 → 53 s | la montée que le script demande au plan 20 |
-| 56,5 s | pouls et arpège se retirent, il ne reste que la nappe et la basse |
-| 67,1 → 67,5 s | les 400 ms de fondu exigées par le dossier |
-
-Les réglages sont dans `BandeSon.tsx` :
+Déposer le fichier dans `public/son/musique/` et écrire son nom :
 
 ```ts
 export const MUSIQUE = {
@@ -144,16 +131,13 @@ export const MUSIQUE = {
 };
 ```
 
-Pour une vraie piste composée, déposer le fichier dans `public/son/musique/` et
-changer le nom : le fondu et l'esquive continuent de s'appliquer.
+Le fondu d'ouverture, les 400 ms de fermeture exigées par le dossier et l'esquive
+sous la voix s'appliquent alors d'eux-mêmes.
 
-L'esquive est automatique : la musique baisse 12 images avant chaque réplique et
-remonte quand plus personne ne parle. Les respirations du script — plans 3, 10,
-18 et 20 — retrouvent donc le niveau plein, ce qui est exactement leur rôle.
-
-Elle ne compte **que les répliques réellement enregistrées**. Tant que la voix
-n'est pas là, la musique reste à son niveau plein : esquiver sous une voix absente
-laisserait le film à peine audible.
+L'esquive ne compte **que les répliques réellement enregistrées** : tant que la
+voix n'est pas complète, la musique reste pleine là où personne ne parle. Les
+respirations du script — plans 3, 10, 18 et 20 — retrouvent donc leur niveau,
+ce qui est exactement leur rôle.
 
 ---
 
@@ -177,13 +161,12 @@ place, nommés, et on peut les déplacer à l'œil avant de figer les valeurs.
 
 ---
 
-## 5. Où en est le mixage
+## 5. L'ordre dans lequel s'y prendre
 
-Mesuré sur le rendu : **crête −2,1 dBFS, RMS moyen −19,4 dBFS**. De la marge sous
-le plafond, un niveau moyen confortable, et la courbe suit bien les actes — très
-bas sur l'accroche, plein à partir de la marque, en retrait sur la chute.
-
-Quand la voix arrivera, la refaire passer devant : si on doit monter la voix pour
-l'entendre, c'est que la musique est trop forte. Les bruitages se règlent
-*contre* la voix, pas dans le vide — le *ding* doit tomber dans un trou, pas sur
-un mot.
+1. **Finir la voix** — les répliques 8 à 12. C'est elle qui porte le film et qui
+   décide du reste ; une fois les douze en place, on sait où sont les vrais
+   silences.
+2. **Les bruitages ensuite**, aux six images du tableau. Les régler *contre* la
+   voix, pas dans le vide : le *ding* doit tomber dans un trou, pas sur un mot.
+3. **La musique en dernier**, à un niveau qui laisse la voix devant. Si on doit
+   monter la voix pour l'entendre, c'est que la musique est trop forte.
