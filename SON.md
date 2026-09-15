@@ -1,21 +1,20 @@
 # Immopilier — voix off, bruitages, musique
 
-**Sept des douze répliques sont montées et calées.** Les bruitages et la musique
-sont attendus du commanditaire ; leurs emplacements sont prêts et vides.
+**La musique est en place et les bruitages sont posés.** Sept des douze répliques
+de voix off sont calées ; les cinq dernières manquent.
 
-Tout est câblé de la même façon : chaque réplique, chaque bruitage et la musique
-ne se montent que si leur `fichier` est renseigné. Le film se rend donc avec les
-sept voix disponibles, sans musique et sans erreur.
+Mesuré sur le rendu : **crête −2,7 dBFS, RMS −23,5 dBFS, aucun échantillon
+écrêté**. De la marge sous le plafond, et la voix reste devant.
 
 Où ça se passe :
 
 ```
 public/son/voix/          vo-01.mp3 … vo-07.mp3 — les prises livrées
-public/son/bruitages/     vide, en attente
-public/son/musique/       vide, en attente
+public/son/bruitages/     les neuf sons, fabriqués par tools/prep-sons.mjs
+public/son/musique/       nappe.mp3 — la piste fournie
 src/immopilier/son/
   voix-off.ts             les 12 répliques du conducteur et leur image de départ
-  bruitages.ts            les bruitages et leur image
+  bruitages.ts            les 46 repères de bruitage, à l'image
   BandeSon.tsx            le montage son, monté dans la composition
 ```
 
@@ -80,66 +79,84 @@ du script.
 
 ## 2. Les bruitages
 
-La charte n'en retient que trois — le *tick* du radar, le *ding* de validation,
-le *clic* final. Le script en ajoute deux : le *clac* de pause du plan 3 et le
-souffle montant du plan 8. `bruitages.ts` les attend à l'image :
+Deux familles, et la distinction fait tout le mixage.
 
-| Image | Temps | Ce qu'on entend |
+### Les cinq sons qui comptent
+
+Ceux de la charte et du script : les moments où le produit *répond*. Ils
+s'entendent.
+
+| Temps | Ce qu'on entend | Niveau |
 |---|---|---|
-| 318 | 5,30 s | le *clac* de pause, quand la fenêtre se fige |
-| 1087 | 18,12 s | le souffle montant sur l'arrivée de la marque |
-| 1309 | 21,82 s | le *ding* propre sur le ✓ de l'URL |
-| 1476 | 24,60 s | le point qui se pose sur la parcelle |
-| 1591 | 26,52 s | le *clic* du curseur sur le ✓ |
-| 3984 | 66,40 s | le *clic* de souris final |
+| 0,1 → 2,2 s | les huit *ticks* du radar, plan 1 | 0,18 |
+| 5,30 s | le *clac* de pause, quand la fenêtre se fige | 0,50 |
+| 18,12 s | le souffle montant sur l'arrivée de la marque | 0,38 |
+| 20,88 s | le *ding* propre sur le ✓ de l'URL | 0,62 |
+| 24,60 s | le point qui se pose sur la parcelle | 0,50 |
+| 26,52 s | le *clic* du curseur sur le ✓ | 0,50 |
+| 66,40 s | le *clic* de souris final | 0,60 |
 
-Plus les **ticks du radar** au plan 1. Un par point allumé ferait 150 sons ; on
-n'en garde que huit, régulièrement répartis sur le tour de 2,4 s. L'oreille
-entend un balayage, pas une mitraille.
+Le *ding* a demandé un recalage. À sa place d'origine — 21,82 s — il tombait en
+plein milieu de la réplique 5 et s'y noyait : +1,2 dB au-dessus du niveau
+ambiant, autant dire rien. La frappe de l'URL démarre donc plus tôt et court un
+peu plus vite, et le ✓ arrive à **20,88 s**, dans le trou qui suit « collez
+simplement le lien de l'annonce ». Il ressort maintenant à **+21,9 dB**. C'est la
+règle : un bruitage se règle *contre* la voix, pas dans le vide.
 
-S'en tenir là. Un film sobre ne bruite pas tout, il bruite ce qui compte : les
-trois moments où le produit *répond* — le lien validé, l'adresse trouvée, le
-bouton cliqué.
+### Les sons d'interface
 
-Pour les brancher : déposer les fichiers dans `public/son/bruitages/` et écrire
-leur nom dans `bruitages.ts`. Penser à normaliser les prises entre elles, sinon
-les volumes du tableau ne veulent plus rien dire : un souffle qui sature pendant
-qu'un tick s'entend à peine ne se règle pas au volume.
+Ce qui apparaît, ce qui défile, ce qui glisse : les jalons du plan 5, les vingt
+vignettes du plan 6, les quatre blocs du plan 13, la couronne, les bulles, les
+grands chiffres. Trente-neuf repères en tout, tous entre **0,12 et 0,34** — c'est
+de la texture, pas un événement.
 
-`tools/prep-sons.mjs` sait fabriquer un jeu d'attente synthétisé, si on veut
-juger du rythme avant d'avoir les vrais sons.
+Ils sont volontairement à peine audibles, et certains sont masqués par la voix :
+c'est voulu. Quarante bruits à plein niveau transformeraient la démonstration en
+jeu vidéo. Deux plans restent **nus** — le 22 et les arcs du 23 : la musique doit
+respirer avant la chute, et le dernier clic n'a de poids que sur du silence.
 
----
+Le plan 6 ne sonne qu'une vignette sur deux. Vingt sons en 3,3 secondes feraient
+une bouillie.
+
+### D'où ils viennent
+
+Ils sont **synthétisés**, pas téléchargés : `tools/prep-sons.mjs` les fabrique de
+bout en bout — une cloche à deux partiels pour le *ding*, deux impulsions de
+bruit filtré pour le *clic*, un passe-bas qui s'ouvre et se referme pour
+l'apparition, un tremblement rapide sous un filtre qui monte pour le défilement.
+Aucune banque de sons, donc aucune licence à vérifier.
+
+Chaque fichier est normalisé avant écriture, sans quoi les volumes du tableau ne
+voudraient rien dire.
+
+Régénérer : `node tools/prep-sons.mjs`
 
 ## 3. La musique
 
-⟦ Attendue du commanditaire. ⟧ Ce que le dossier demande : **libre de droits,
-tempo 100–110, sans voix**, coupée exactement sur 67,5 s. Le modèle tient sur une
-nappe électronique continue avec un *build* de 8 s avant l'arrivée de la marque —
-soit un build qui culmine vers 18 s, au plan 8.
+`public/son/musique/nappe.mp3` — la piste fournie. Analysée : **67,57 s, 116 BPM,
+crête −1,0 dBFS, RMS −21,0 dBFS**, avec son propre fondu de sortie à partir de
+64 s.
 
-⟦ Vérifier la licence avant diffusion, y compris organique : beaucoup de pistes
-« gratuites » excluent la publicité. ⟧
+Sa durée est celle du montage à sept centièmes près : elle est taillée pour ce
+film. Elle démarre donc à l'image 0, sans boucle ni raccourci, et les fondus
+écrits dans `BandeSon.tsx` sont très courts — ils évitent le clic de premier et
+de dernier échantillon, rien de plus, puisque la piste porte déjà les siens.
 
-Déposer le fichier dans `public/son/musique/` et écrire son nom :
+⟦ Le dossier demandait une piste entre 100 et 110 BPM ; celle-ci est à 116.
+  Écart assumé — c'est la piste fournie. ⟧
 
 ```ts
 export const MUSIQUE = {
   fichier: 'nappe.mp3',
-  volume: 0.62,         // niveau nominal
-  volumeSousVoix: 0.2,  // sous la voix off — elle s'efface, elle ne disparaît pas
+  volume: 0.82,          // niveau nominal
+  volumeSousVoix: 0.26,  // sous la voix off — elle s'efface, elle ne disparaît pas
 };
 ```
 
-Le fondu d'ouverture, les 400 ms de fermeture exigées par le dossier et l'esquive
-sous la voix s'appliquent alors d'eux-mêmes.
-
-L'esquive ne compte **que les répliques réellement enregistrées** : tant que la
-voix n'est pas complète, la musique reste pleine là où personne ne parle. Les
-respirations du script — plans 3, 10, 18 et 20 — retrouvent donc leur niveau,
-ce qui est exactement leur rôle.
-
----
+L'esquive est automatique : la musique baisse 12 images avant chaque réplique et
+remonte quand plus personne ne parle. Elle ne compte **que les répliques
+réellement enregistrées** — tant que les cinq dernières manquent, la musique
+reste pleine après 39,5 s, ce qui est le bon comportement.
 
 ## 4. Rendre
 
@@ -153,6 +170,15 @@ Pour le livrable **muet** demandé par le dossier :
 
 ```bash
 npx remotion render Immopilier out/immopilier-67s-muet.mp4 --muted
+```
+
+Le mixage sort à −23,5 dBFS RMS, avec 2,7 dB de marge. C'est un master prudent,
+sans limiteur. Pour viser les −16 LUFS attendus sur le web, passer le fichier
+rendu par une normalisation de loudness :
+
+```bash
+npx remotion ffmpeg -i out/immopilier-67s-1080p.mp4 \
+  -af loudnorm=I=-16:TP=-1.5:LRA=11 -c:v copy out/immopilier-67s-web.mp4
 ```
 
 Pour vérifier le calage sans attendre un rendu complet, ouvrir le Studio

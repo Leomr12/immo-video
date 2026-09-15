@@ -16,19 +16,25 @@ import {VOIX_OFF} from './voix-off';
  */
 
 /**
- * ⟦ La musique est fournie par le commanditaire. Déposer le fichier dans
- *   `public/son/musique/` et écrire son nom ici : le fondu d'ouverture, l'esquive
- *   sous la voix et les 400 ms de fermeture exigées par le dossier s'appliquent
- *   alors d'eux-mêmes. Le dossier demande une piste sans voix, entre 100 et
- *   110 BPM, et rappelle de vérifier la licence même pour une diffusion
- *   organique. ⟧
+ * La piste fournie par le commanditaire : 67,57 s, 116 BPM, sans voix, avec son
+ * propre fondu de sortie à partir de 64 s. Elle est taillée pour le film — sa
+ * durée est celle du montage à 7 centièmes près — donc elle démarre à l'image 0
+ * et n'est ni bouclée ni raccourcie.
+ *
+ * Son fondu d'ouverture est très court ; celui écrit ici n'en rajoute presque
+ * pas, il évite seulement le clic de premier échantillon. La fermeture, elle,
+ * est déjà dans le fichier : la rampe de `volume` ne fait que garantir le silence
+ * sur la toute dernière image.
+ *
+ * ⟦ Le dossier demandait une piste entre 100 et 110 BPM ; celle-ci est à 116.
+ *   Écart assumé par le commanditaire, qui l'a fournie. ⟧
  */
 export const MUSIQUE = {
-  fichier: null as string | null,
+  fichier: 'nappe.mp3' as string | null,
   /** Niveau nominal, hors passages parlés. */
-  volume: 0.62,
+  volume: 0.82,
   /** Niveau sous la voix off — la musique s'efface, elle ne disparaît pas. */
-  volumeSousVoix: 0.2,
+  volumeSousVoix: 0.26,
 };
 
 /**
@@ -49,6 +55,13 @@ const PASSAGES_PARLES = VOIX_OFF.filter((replique) => replique.fichier).map((rep
 
 const parle = (frame: number) => PASSAGES_PARLES.some((p) => frame >= p.debut - 12 && frame < p.fin);
 
+/**
+ * Les prises de voix sortent à −6 dBFS de crête. On les remonte un peu : c'est la
+ * voix qui porte le film, elle doit rester devant la musique sans qu'on ait à
+ * baisser tout le reste.
+ */
+const VOIX_VOLUME = 1.2;
+
 export const BandeSon: React.FC = () => {
   return (
     <AbsoluteFill name="Bande-son">
@@ -57,9 +70,10 @@ export const BandeSon: React.FC = () => {
           name="Musique"
           src={staticFile(`son/musique/${MUSIQUE.fichier}`)}
           volume={(f) =>
-            // Fondu d'ouverture, esquive sous la voix, fondu de 400 ms à la fin.
+            // Esquive sous la voix. Les fondus sont courts : la piste porte déjà
+            // les siens, on ne fait qu'éviter un clic aux deux extrémités.
             (parle(f) ? MUSIQUE.volumeSousVoix : MUSIQUE.volume) *
-            interpolate(f, [0, 36, 4026, 4050], [0, 1, 1, 0], {
+            interpolate(f, [0, 8, 4040, 4050], [0, 1, 1, 0], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
             })
@@ -70,7 +84,7 @@ export const BandeSon: React.FC = () => {
       {VOIX_OFF.map((replique) =>
         replique.fichier ? (
           <Sequence key={replique.n} name={`Voix ${replique.n}`} from={replique.debut}>
-            <Audio src={staticFile(`son/voix/${replique.fichier}`)} />
+            <Audio src={staticFile(`son/voix/${replique.fichier}`)} volume={() => VOIX_VOLUME} />
           </Sequence>
         ) : null,
       )}

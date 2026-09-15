@@ -207,6 +207,65 @@ const pose = () => {
   return [passeBas(s, 3000)];
 };
 
+/** Une carte, un bloc, une tuile qui apparaît : un souffle court et mat. */
+const apparition = () => {
+  const duree = 0.22;
+  const n = secondes(duree);
+  const brut = new Float64Array(n);
+  for (let i = 0; i < n; i++) brut[i] = bruit();
+  const s = new Float64Array(n);
+  let precedent = 0;
+  for (let i = 0; i < n; i++) {
+    const p = i / n;
+    // La coupure monte puis retombe : on entend l'objet arriver et se poser.
+    const coupure = 700 + Math.sin(p * Math.PI) * 5200;
+    const k = Math.exp((-2 * Math.PI * coupure) / SR);
+    precedent = brut[i] * (1 - k) + precedent * k;
+    s[i] = precedent * Math.sin(p * Math.PI) * 1.8;
+  }
+  return [passeHaut(s, 320)];
+};
+
+/** Un document qu'on fait défiler vite, puis qui s'arrête net. Plan 12. */
+const defilement = () => {
+  const duree = 1.35;
+  const n = secondes(duree);
+  const brut = new Float64Array(n);
+  for (let i = 0; i < n; i++) brut[i] = bruit();
+  const s = new Float64Array(n);
+  let precedent = 0;
+  for (let i = 0; i < n; i++) {
+    const t = i / SR;
+    const p = t / duree;
+    const coupure = 900 + p * 3800;
+    const k = Math.exp((-2 * Math.PI * coupure) / SR);
+    precedent = brut[i] * (1 - k) + precedent * k;
+    // Le tremblement rapide donne le grain des pages qui filent.
+    const grain = 0.55 + 0.45 * Math.sin(2 * Math.PI * 34 * t);
+    const gain = Math.min(1, p / 0.12) * (p > 0.82 ? Math.pow((1 - p) / 0.18, 1.6) : 1);
+    s[i] = precedent * grain * gain * 1.7;
+  }
+  return [passeHaut(s, 500)];
+};
+
+/** Un glissement latéral : le travelling du plan 5, l'inclinaison du plan 11. */
+const glissement = () => {
+  const duree = 1.1;
+  const n = secondes(duree);
+  const brut = new Float64Array(n);
+  for (let i = 0; i < n; i++) brut[i] = bruit();
+  const s = new Float64Array(n);
+  let precedent = 0;
+  for (let i = 0; i < n; i++) {
+    const p = i / n;
+    const coupure = 400 + Math.sin(p * Math.PI) * 3000;
+    const k = Math.exp((-2 * Math.PI * coupure) / SR);
+    precedent = brut[i] * (1 - k) + precedent * k;
+    s[i] = precedent * Math.pow(Math.sin(p * Math.PI), 1.4) * 1.9;
+  }
+  return [passeHaut(s, 220)];
+};
+
 // ── La nappe ──────────────────────────────────────────────────────────────────
 
 /**
@@ -307,7 +366,7 @@ const nappe = () => {
 
 // ── Écriture ──────────────────────────────────────────────────────────────────
 
-const bruitages = {tick, ding, clic, clac, souffle, pose};
+const bruitages = {tick, ding, clic, clac, souffle, pose, apparition, defilement, glissement};
 for (const [nom, fabrique] of Object.entries(bruitages)) {
   const wav = `${racine}public/son/bruitages/${nom}.wav`;
   ecrireWav(wav, normaliser(fabrique(), 0.89));
@@ -315,7 +374,12 @@ for (const [nom, fabrique] of Object.entries(bruitages)) {
   console.log(`✓ bruitages/${nom}.mp3`);
 }
 
-const wavNappe = `${racine}public/son/musique/nappe.wav`;
-ecrireWav(wavNappe, normaliser(nappe(), 0.8));
-versMp3(wavNappe, `${racine}public/son/musique/nappe.mp3`, '160k');
-console.log('✓ musique/nappe.mp3');
+// La nappe n'est plus fabriquée ici : elle est fournie, et posée directement dans
+// public/son/musique/. On garde `nappe()` au cas où il faudrait une piste
+// d'attente, mais on ne l'écrit pas par-dessus la vraie.
+if (process.argv.includes('--nappe')) {
+  const wavNappe = `${racine}public/son/musique/nappe-attente.wav`;
+  ecrireWav(wavNappe, normaliser(nappe(), 0.8));
+  versMp3(wavNappe, `${racine}public/son/musique/nappe-attente.mp3`, '160k');
+  console.log('✓ musique/nappe-attente.mp3');
+}

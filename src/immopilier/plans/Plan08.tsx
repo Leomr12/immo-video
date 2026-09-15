@@ -10,7 +10,13 @@ import {Logo} from '../composants/Logo';
  * logo, un champ de recherche : l'URL de l'annonce s'y colle caractère par
  * caractère, à 28 caractères par seconde, et un ✓ bleu s'allume au bout.
  *
- * Voix off — « Immopilier. Tu colles le lien de l'annonce. »
+ * Voix off — « Avec Immopilier, collez simplement le lien de l'annonce. »
+ *
+ * La frappe démarre plus tôt et court un peu plus vite que les 28 caractères par
+ * seconde du script : le ✓ tombe ainsi à 20,88 s, dans le trou qui suit la
+ * réplique, au lieu de sonner en plein milieu de la suivante. Le script comptait
+ * une URL de 50 caractères, celle-ci en fait 54 — c'est l'instant d'arrivée qui
+ * compte, pas la cadence.
  *
  * Le logo est celui de la marque, découvert par un volet qui part de l'épingle :
  * le mot se déplie depuis le logo lui-même, et le plan se referme sur le lockup
@@ -32,8 +38,9 @@ const URL_ANNONCE = 'https://leboncoin.fr/ad/ventes_immobilieres/2915408736';
 export const Plan08: React.FC = () => {
   const frame = useCurrentFrame();
 
-  // 28 caractères par seconde : chaque caractère prend 60 / 28 image.
-  const caracteres = Math.max(0, Math.min(URL_ANNONCE.length, Math.floor(((frame - 96) * 28) / 60)));
+  // 34 caractères par seconde, à partir de l'image 70 : les 54 caractères sont
+  // posés à l'image 166, soit 20,88 s dans le film.
+  const caracteres = Math.max(0, Math.min(URL_ANNONCE.length, Math.floor(((frame - 70) * 34) / 60)));
   const fini = caracteres >= URL_ANNONCE.length;
 
   return (
@@ -126,12 +133,12 @@ export const Plan08: React.FC = () => {
           backgroundColor: '#ffffff',
           border: '1px solid #e5e5e9',
           boxShadow: '0 26px 70px rgba(18,18,22,0.10)',
-          opacity: interpolate(frame, [76, 96], [0, 1], {
+          opacity: interpolate(frame, [52, 70], [0, 1], {
             extrapolateLeft: 'clamp',
             extrapolateRight: 'clamp',
             easing: Easing.bezier(0.2, 0.8, 0.2, 1),
           }),
-          translate: interpolate(frame, [76, 96], ['0px 18px', '0px 0px'], {
+          translate: interpolate(frame, [52, 70], ['0px 18px', '0px 0px'], {
             extrapolateLeft: 'clamp',
             extrapolateRight: 'clamp',
             easing: Easing.bezier(0.2, 0.8, 0.2, 1),
@@ -163,12 +170,12 @@ export const Plan08: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            opacity: interpolate(frame, [222, 234], [0, 1], {
+            opacity: interpolate(frame, [166, 178], [0, 1], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
               easing: Easing.bezier(0.2, 0.8, 0.2, 1),
             }),
-            scale: interpolate(frame, [222, 238], [0.5, 1], {
+            scale: interpolate(frame, [166, 182], [0.5, 1], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
               easing: Easing.bezier(0.2, 0.8, 0.2, 1),

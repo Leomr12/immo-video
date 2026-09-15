@@ -44,9 +44,9 @@ Les cinq actes sont montés, soit les 24 plans du script.
 | IV. La preuve | 20–22 | 50,9 → 61,0 s |
 | V. L'appel | 23–24 | 61,0 → 67,5 s |
 
-Sept des douze répliques de voix off sont montées et calées — voir
-[SON.md](SON.md). Restent à faire : les cinq dernières répliques, les bruitages,
-la musique, les photos d'annonces du plan 6, puis les trois recadrages livrables.
+La musique et les bruitages sont en place, et sept des douze répliques de voix
+off sont calées — voir [SON.md](SON.md). Restent à faire : les cinq dernières
+répliques, les photos d'annonces du plan 6, puis les trois recadrages livrables.
 
 ## Comment le code est organisé
 
